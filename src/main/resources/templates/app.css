@@ -1,0 +1,100 @@
+.body {
+    background-color: #F4CEDD;
+}
+
+h1 {
+    font-family: nunito;
+    font-size: 50px;
+    color: white;
+    text-align: center;
+}
+
+span {
+    font-family: nunito;
+    font-size: 50px;
+    color: purple;
+}
+
+h2 {
+    padding-top: 70px;
+    text-align: center;
+    font-family: nunito;
+    font-size: 40px;
+    color: rgb(218, 104, 151);
+}
+
+p {
+    text-align: center;
+    padding-left: 100px;
+    padding-right: 100px;
+    line-height: 38px;
+}
+
+.row {
+    background-color: #F4CEDD;
+}
+
+.navbar {
+    justify-content: space-between;
+    background: rgb(176, 88, 228);
+}
+
+.candyBrand {
+    color: blueviolet;
+    font-family: nunito;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.div {
+    background-color: #F4CEDD;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.navButton {
+    font-family: nunito;
+    font-size: 22px;
+    color: white;
+}
+
+.textCol {
+    font-family: nunito;
+    font-size: 18px;
+    color: rgb(218, 104, 151);
+    padding-bottom: 125px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.fas {
+    color: white;
+    font-size: 50px;
+}
+
+@media (max-width: 960px) {
+    .textCol {
+        font-family: nunito;
+        font-size: 18px;
+        color: rgb(218, 104, 151);
+        padding-bottom: 100px;
+        padding-left: 15px;
+        padding-right: 15px;
+        display: flex;
+        flex-direction: column;
+        order: 2
+    }
+    .imageCol {
+        order: 1
+    }
+}
