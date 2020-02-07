@@ -19,6 +19,7 @@ public class DecisionDatabase {
     }
 
     public List<Decision> getDecisions() {
+        System.out.println("Size" + myDecisionList.size());
         return myDecisionList;
     }
 

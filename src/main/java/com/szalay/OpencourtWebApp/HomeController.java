@@ -35,10 +35,10 @@ public class HomeController {
 //    public String search(@RequestParam String searchedTerm) {
 //        decisionDatabase.fullSearch(searchedTerm);
 //        return "redirect:results";
-    public @ResponseBody ModelAndView results(@RequestParam String searchedTerm) {
-//                decisionDatabase.fullSearch(searchedTerm);
+    public ModelAndView results(@RequestParam String searchedTerm) {
+//        decisionDatabase.fullSearch(searchedTerm);
         model.put("results", decisionDatabase.getDecisions());
-        return  new ModelAndView("results", model);
+       return new ModelAndView("results", model);
     }
 
 //    @RequestMapping(value = "/", method = RequestMethod.GET)
