@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset=" UTF-8" />
     <title>Találatok</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -16,14 +16,14 @@
     </style>
 </head>
 <body>
-{{#results}}
+
 <form action="/decision" method="post">
-    <div class="result">
-        <p>Bíróság: {{birosagneve}} </p>
-        <p>Ügyszám: {{ugyszam}} </p>
+      <div class="result">
+        <p th:text="${results.ugyszam}"> balabla</p>
+        <p th:text="${results.birosagneve}">blaba2</p>
         <button name="ugyszam" value="{{ugyszam}}" class="btn btn-outline-success btn-sm">Megnyitás</button>
     </div>
 </form>
-{{/results}}
+
 </body>
 </html>
