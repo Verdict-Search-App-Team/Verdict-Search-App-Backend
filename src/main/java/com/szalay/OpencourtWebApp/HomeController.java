@@ -35,7 +35,7 @@ public class HomeController {
 //    public String search(@RequestParam String searchedTerm) {
 //        decisionDatabase.fullSearch(searchedTerm);
 //        return "redirect:results";
-    public ModelAndView results(@RequestParam String searchedTerm) {
+    public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
         decisionDatabase.fullSearch(searchedTerm);
         model.put("results", decisionDatabase.getDecisions());
        return new ModelAndView("results", model);

@@ -27,46 +27,19 @@ public class DecisionDatabase {
         myDecisionList.clear();
     }
 
-    public void fullSearch(String searchedTerm) {
+    public void fullSearch(String searchedTerm) throws ClassNotFoundException {
 
         // our SQL SELECT query.
         // if you only need a few columns, specify them by name instead of using "*"
         String query = "SELECT * FROM opencourtdatabase.pp_felulvizsgalat " +
                 "WHERE MATCH(bevezeto, rendelkezo, tenyallas, jogiindokolas, zaro)" +
-                "AGAINST(" + "\"" + searchedTerm + "\"" + ", IN NATURAL LANGUAGE MODE);";
+                "AGAINST(" + "\"" + searchedTerm + "\"" + " IN NATURAL LANGUAGE MODE);";
 
-        try {
-            ResultSet rs = getResultSet(query);
-            // iterate through the java resultset
-            while (rs.next()) {
-                myDecisionList.add(new Decision(
-                                rs.getString("szam"),
-                                rs.getString("hatarozatszoveg"),
-                                rs.getString("bevezeto"),
-                                rs.getString("rendelkezo"),
-                                rs.getString("tenyallas"),
-                                rs.getString("jogiindokolas"),
-                                rs.getString("zaro"),
-                                rs.getString("birosag"),
-                                rs.getString("szekhely"),
-                                rs.getString("ugytipus"),
-                                rs.getString("eljarastipus"),
-                                rs.getString("eljarasszakasz"),
-                                rs.getString("targy"),
-                                rs.getString("dontes"),
-                                rs.getString("dontesmasodfok"),
-                                rs.getString("donteselsofok")
-                        )
-                );
+        resultSetOperation(query);
 
-            }
-        } catch (Exception e) {
-            System.err.println("Got an exception in FULLSEARCH method! ");
-            System.err.println(e.getMessage());
-        }
     }
 
-    private static ResultSet getResultSet(String query) throws ClassNotFoundException {
+    private void resultSetOperation(String query) throws ClassNotFoundException {
 
 //               try {
 //            Class.forName("com.mysql.jdbc.Driver");
@@ -98,6 +71,35 @@ public class DecisionDatabase {
 //            stmt.execute("USE opencourtdatabase;");
             rs = stmt.executeQuery(query);
 
+            try {
+                // iterate through the java resultset
+                while (rs.next()) {
+                    myDecisionList.add(new Decision(
+                                    rs.getString("szam"),
+                                    rs.getString("hatarozatszoveg"),
+                                    rs.getString("bevezeto"),
+                                    rs.getString("rendelkezo"),
+                                    rs.getString("tenyallas"),
+                                    rs.getString("jogiindokolas"),
+                                    rs.getString("zaro"),
+                                    rs.getString("birosag"),
+                                    rs.getString("szekhely"),
+                                    rs.getString("ugytipus"),
+                                    rs.getString("eljarastipus"),
+                                    rs.getString("eljarasszakasz"),
+                                    rs.getString("targy"),
+                                    rs.getString("dontes"),
+                                    rs.getString("dontesmasodfok"),
+                                    rs.getString("donteselsofok")
+                            )
+                    );
+
+                }
+            } catch (Exception e) {
+                System.err.println("Got an exception in FULLSEARCH method! ");
+                System.err.println(e.getMessage());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("NO CONNECTION! ");
@@ -115,7 +117,6 @@ public class DecisionDatabase {
 //            e.printStackTrace();
 //
 //        }
-        return rs;
 
     }
 
