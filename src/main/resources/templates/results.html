@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset=" UTF-8" />
     <title>Találatok</title>
@@ -16,14 +16,14 @@
     </style>
 </head>
 <body>
-
+{{#results}}
 <form action="/decision" method="post">
       <div class="result">
-        <p th:text="${results.ugyszam}"> balabla</p>
-        <p th:text="${results.birosagneve}">blaba2</p>
+        <p> Ügyszám: {{ugyszam}}</p>
+        <p> Bíróság neve: {{birosagneve}}</p>
         <button name="ugyszam" value="{{ugyszam}}" class="btn btn-outline-success btn-sm">Megnyitás</button>
     </div>
 </form>
-
+{{/results}}
 </body>
 </html>

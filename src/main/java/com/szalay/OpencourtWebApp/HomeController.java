@@ -36,7 +36,7 @@ public class HomeController {
 //        decisionDatabase.fullSearch(searchedTerm);
 //        return "redirect:results";
     public ModelAndView results(@RequestParam String searchedTerm) {
-//        decisionDatabase.fullSearch(searchedTerm);
+        decisionDatabase.fullSearch(searchedTerm);
         model.put("results", decisionDatabase.getDecisions());
        return new ModelAndView("results", model);
     }

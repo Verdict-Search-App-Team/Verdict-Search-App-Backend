@@ -96,7 +96,7 @@ public class DecisionDatabase {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
 //            stmt.execute("USE opencourtdatabase;");
-            rs= stmt.executeQuery(query);
+            rs = stmt.executeQuery(query);
 
         } catch (Exception e) {
             e.printStackTrace();
