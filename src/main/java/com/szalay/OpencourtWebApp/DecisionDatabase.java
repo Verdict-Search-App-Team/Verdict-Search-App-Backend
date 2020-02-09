@@ -23,9 +23,19 @@ public class DecisionDatabase {
         return myDecisionList;
     }
 
-    public void reset() {
-        myDecisionList.clear();
-    }
+//    public void reset() {
+//        myDecisionList.;
+//    }
+//
+//    public void findDecision() {
+//        myDecisionList.
+//
+//        for (int i = 0; i < myDecisionList.size(); i++){
+//            if (myDecisionList.indexOf())
+//        }
+//
+//    }
+
 
     public void fullSearch(String searchedTerm) throws ClassNotFoundException {
 

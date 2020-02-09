@@ -19,22 +19,20 @@ public class HomeController {
 //    }
 
     @RequestMapping("/home")
-    public @ResponseBody ModelAndView home() {
+    @ResponseBody
+    public ModelAndView home() {
         model.put("home", decisionDatabase.getDecisions());
         return new ModelAndView("home", model);
     }
 
-    @RequestMapping(value="/reset", method = RequestMethod.POST)
-    public @ResponseBody String reset() {
-        decisionDatabase.reset();
-        return "redirect: home";
-    }
+//    @RequestMapping(value="/reset", method = RequestMethod.POST)
+//    public @ResponseBody String reset() {
+//        decisionDatabase.reset();
+//        return "redirect: home";
+//    }
 
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-//    public String search(@RequestParam String searchedTerm) {
-//        decisionDatabase.fullSearch(searchedTerm);
-//        return "redirect:results";
     public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
         decisionDatabase.fullSearch(searchedTerm);
         model.put("results", decisionDatabase.getDecisions());
@@ -46,7 +44,7 @@ public class HomeController {
 //        return "home";
 //    }
 
-    @RequestMapping(value = "/decision", method = RequestMethod.POST)
+    @RequestMapping(value = "/decisions", method = RequestMethod.POST)
     public ModelAndView decision() {
         model.put("decisions", decisionDatabase.getDecisions());
         return new ModelAndView("decisions", model);

@@ -1,8 +1,8 @@
 package com.szalay.OpencourtWebApp;
 
-public class Decision {
+public final class Decision {
 
-    private String ugyszam, hatarozatStringClean, bevezeto, rendelkezo, tenyallas, jogiindokolas, zaro, birosagneve,
+    private final String ugyszam, hatarozatStringClean, bevezeto, rendelkezo, tenyallas, jogiindokolas, zaro, birosagneve,
             birosagSzekhelye, ugyTipus, eljarasTipus, eljarasSzakasz, targy, dontes, dontesmasodfok, donteselsofok;
 
     public Decision(String ugyszam, String hatarozatStringClean, String bevezeto, String rendelkezo, String tenyallas,
