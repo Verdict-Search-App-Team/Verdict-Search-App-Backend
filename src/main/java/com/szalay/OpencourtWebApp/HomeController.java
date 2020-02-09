@@ -47,8 +47,9 @@ public class HomeController {
 //    }
 
     @RequestMapping(value = "/decision", method = RequestMethod.POST)
-    public @ResponseBody String decision() {
-        return "redirect: /home";
+    public ModelAndView decision() {
+        model.put("decisions", decisionDatabase.getDecisions());
+        return new ModelAndView("decisions", model);
     }
 
 //    @RequestMapping(value = "/carsdeleted", method = RequestMethod.POST)
