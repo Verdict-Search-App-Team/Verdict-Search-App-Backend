@@ -1,5 +1,7 @@
 package com.szalay.OpencourtWebApp;
 
+import com.szalay.OpencourtWebApp.db.DecisionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,8 +11,12 @@ import java.util.Map;
 @RestController
 public class HomeController {
 
-    private static DecisionDatabase decisionDatabase = new DecisionDatabase();
-    private Map<String, Object> model = new HashMap<>();
+    //private static DecisionDatabase decisionDatabase = new DecisionDatabase();
+    private final DecisionRepository decisionRepository;
+
+    public HomeController(DecisionRepository decisionRepository) {
+        this.decisionRepository = decisionRepository;
+    }
 
 //    @RequestMapping("/results")
 //    public @ResponseBody ModelAndView results() {
@@ -21,7 +27,7 @@ public class HomeController {
     @RequestMapping("/home")
     @ResponseBody
     public ModelAndView home() {
-        model.put("home", decisionDatabase.getDecisions());
+        Map<String, Object> model = new HashMap<>();
         return new ModelAndView("home", model);
     }
 
@@ -34,9 +40,10 @@ public class HomeController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
-        decisionDatabase.fullSearch(searchedTerm);
-        model.put("results", decisionDatabase.getDecisions());
-       return new ModelAndView("results", model);
+        Map<String, Object> model = new HashMap<>();
+        //TODO decisionDatabase.fullSearch(searchedTerm);
+        model.put("results", decisionRepository.findByBirosagneveContaining(searchedTerm));
+        return new ModelAndView("results", model);
     }
 
 //    @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,7 +53,8 @@ public class HomeController {
 
     @RequestMapping(value = "/decisions", method = RequestMethod.POST)
     public ModelAndView decision() {
-        model.put("decisions", decisionDatabase.getDecisions());
+        Map<String, Object> model = new HashMap<>();
+        model.put("decisions", decisionRepository.findAll());
         return new ModelAndView("decisions", model);
     }
 
