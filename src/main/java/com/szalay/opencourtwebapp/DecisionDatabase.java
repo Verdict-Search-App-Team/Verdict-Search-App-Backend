@@ -1,4 +1,4 @@
-package com.szalay.OpencourtWebApp;
+package com.szalay.opencourtwebapp;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

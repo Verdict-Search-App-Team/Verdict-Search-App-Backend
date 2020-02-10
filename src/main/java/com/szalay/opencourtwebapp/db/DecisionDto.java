@@ -1,4 +1,4 @@
-package com.szalay.OpencourtWebApp.db;
+package com.szalay.opencourtwebapp.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

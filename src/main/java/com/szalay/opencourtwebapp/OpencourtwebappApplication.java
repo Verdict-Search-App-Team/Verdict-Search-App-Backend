@@ -1,13 +1,13 @@
-package com.szalay.OpencourtWebApp;
+package com.szalay.opencourtwebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OpencourtWebAppApplication {
+public class OpencourtwebappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OpencourtWebAppApplication.class, args);
+		SpringApplication.run(OpencourtwebappApplication.class, args);
 	}
 
 }

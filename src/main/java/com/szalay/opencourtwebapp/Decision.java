@@ -1,4 +1,4 @@
-package com.szalay.OpencourtWebApp;
+package com.szalay.opencourtwebapp;
 
 public final class Decision {
 

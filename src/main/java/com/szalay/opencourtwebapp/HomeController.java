@@ -1,7 +1,6 @@
-package com.szalay.OpencourtWebApp;
+package com.szalay.opencourtwebapp;
 
-import com.szalay.OpencourtWebApp.db.DecisionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.szalay.opencourtwebapp.db.DecisionRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class HomeController {
+class HomeController {
 
     //private static DecisionDatabase decisionDatabase = new DecisionDatabase();
     private final DecisionRepository decisionRepository;

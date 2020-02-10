@@ -1,7 +1,8 @@
-package com.szalay.OpencourtWebApp.db;
+package com.szalay.opencourtwebapp.db;
+
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import org.springframework.data.repository.CrudRepository;
 
 public interface DecisionRepository extends CrudRepository<DecisionDto, String> {
 
