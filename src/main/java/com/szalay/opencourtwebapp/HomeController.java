@@ -41,7 +41,7 @@ class HomeController {
     public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
         Map<String, Object> model = new HashMap<>();
         //TODO decisionDatabase.fullSearch(searchedTerm);
-        model.put("results", decisionRepository.findByBirosagneveContaining(searchedTerm));
+        model.put("results", decisionRepository.findByBirosagneve(searchedTerm));
         return new ModelAndView("results", model);
     }
 
@@ -51,9 +51,9 @@ class HomeController {
 //    }
 
     @RequestMapping(value = "/decisions", method = RequestMethod.POST)
-    public ModelAndView decision() {
+    public ModelAndView decision(@RequestParam String ugyszam) {
         Map<String, Object> model = new HashMap<>();
-        model.put("decisions", decisionRepository.findAll());
+        model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
         return new ModelAndView("decisions", model);
     }
 
