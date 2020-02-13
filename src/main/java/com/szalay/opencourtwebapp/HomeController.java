@@ -41,7 +41,8 @@ class HomeController {
     public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
         Map<String, Object> model = new HashMap<>();
         //TODO decisionDatabase.fullSearch(searchedTerm);
-        model.put("results", decisionRepository.findByBirosagneve(searchedTerm));
+        model.put("results", decisionRepository.findByTargy(searchedTerm));
+//        model.put("results", decisionRepository.findByBirosagneve(searchedTerm));
         return new ModelAndView("results", model);
     }
 
