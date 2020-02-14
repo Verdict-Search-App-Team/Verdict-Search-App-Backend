@@ -38,10 +38,21 @@ class HomeController {
 
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam String searchedTerm) throws ClassNotFoundException {
+    public ModelAndView results(@RequestParam String searchedTerm, String rendelkezoben,
+                                String tenyallasban, String jogiindokolasban) throws ClassNotFoundException {
         Map<String, Object> model = new HashMap<>();
         //TODO decisionDatabase.fullSearch(searchedTerm);
-        model.put("results", decisionRepository.findByTargy(searchedTerm));
+        if (rendelkezoben != null && rendelkezoben.equals("igen")){
+            model.put("results", decisionRepository.findByRendelkezoContaining(searchedTerm));
+        }
+        else if (tenyallasban != null && tenyallasban.equals("igen")){
+            model.put("results", decisionRepository.findByTenyallasContaining(searchedTerm));
+        }
+        else if (jogiindokolasban != null && jogiindokolasban.equals("igen")){
+            model.put("results", decisionRepository.findByJogiindokolasContaining(searchedTerm));
+        } else {
+            model.put("results", decisionRepository.findByHatarozatStringCleanContaining(searchedTerm));
+        }
 //        model.put("results", decisionRepository.findByBirosagneve(searchedTerm));
         return new ModelAndView("results", model);
     }
