@@ -38,22 +38,32 @@ class HomeController {
 
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam String searchedTerm, String rendelkezoben,
-                                String tenyallasban, String jogiindokolasban) throws ClassNotFoundException {
+    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) throws ClassNotFoundException {
         Map<String, Object> model = new HashMap<>();
+        System.out.println(hatarozatreszChoice);
         //TODO decisionDatabase.fullSearch(searchedTerm);
-        if (rendelkezoben != null && rendelkezoben.equals("igen")){
-            model.put("results", decisionRepository.findByRendelkezoContaining(searchedTerm));
+        if (hatarozatreszChoice != null) {
+            switch (hatarozatreszChoice) {
+                case "teljeshatarozatban":
+                    model.put("results", decisionRepository.findByHatarozatStringCleanContaining(searchedTerm));
+                    break;
+                case "bevezetoben":
+                    model.put("results", decisionRepository.findByBevezetoContaining(searchedTerm));
+                    break;
+                case "rendelkezoben":
+                    model.put("results", decisionRepository.findByRendelkezoContaining(searchedTerm));
+                    break;
+                case "tenyallasban":
+                    model.put("results", decisionRepository.findByTenyallasContaining(searchedTerm));
+                    break;
+                case "jogiindokolasban":
+                    model.put("results", decisionRepository.findByJogiindokolasContaining(searchedTerm));
+                    break;
+                case "zaroreszben":
+                    model.put("results", decisionRepository.findByZaroContaining(searchedTerm));
+                    break;
+            }
         }
-        else if (tenyallasban != null && tenyallasban.equals("igen")){
-            model.put("results", decisionRepository.findByTenyallasContaining(searchedTerm));
-        }
-        else if (jogiindokolasban != null && jogiindokolasban.equals("igen")){
-            model.put("results", decisionRepository.findByJogiindokolasContaining(searchedTerm));
-        } else {
-            model.put("results", decisionRepository.findByHatarozatStringCleanContaining(searchedTerm));
-        }
-//        model.put("results", decisionRepository.findByBirosagneve(searchedTerm));
         return new ModelAndView("results", model);
     }
 
