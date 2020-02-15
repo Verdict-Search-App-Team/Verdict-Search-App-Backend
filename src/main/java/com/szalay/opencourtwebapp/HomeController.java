@@ -72,12 +72,29 @@ class HomeController {
 //        return "home";
 //    }
 
-    @RequestMapping(value = "/decisions", method = RequestMethod.POST)
-    public ModelAndView decision(@RequestParam String ugyszam) {
+    String URLem = "/valami";
+
+//    @RequestMapping(value = "/decisions", method = RequestMethod.POST)
+//    public ModelAndView decision(@RequestParam String ugyszam) {
+//        Map<String, Object> model = new HashMap<>();
+//        model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
+//        return new ModelAndView("decisions", model);
+//    }
+
+    @RequestMapping(value = "/url/{id}", method=RequestMethod.POST)
+    public ModelAndView decision(@PathVariable("id") String birosagneve, @RequestParam String ugyszam) {
         Map<String, Object> model = new HashMap<>();
         model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
         return new ModelAndView("decisions", model);
     }
+
+
+//    @RequestMapping(value="/url/{id}", method=RequestMethod.GET)
+//    public String method(@PathVariable("id") String id) {
+//        System.out.println("the url value : "+id );
+//        return "Whatever";
+//    }
+
 
 //    @RequestMapping(value = "/carsdeleted", method = RequestMethod.POST)
 //    public String search(@RequestParam String licence) {
