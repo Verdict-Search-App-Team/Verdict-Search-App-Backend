@@ -2,12 +2,15 @@ package com.szalay.opencourtwebapp;
 
 public final class Decision {
 
-    private final String ugyszam, hatarozatStringClean, bevezeto, rendelkezo, tenyallas, jogiindokolas, zaro, birosagneve,
-            birosagSzekhelye, ugyTipus, eljarasTipus, eljarasSzakasz, targy, dontes, dontesmasodfok, donteselsofok;
+    public final String ugyszam, hatarozatStringClean, bevezeto, rendelkezo, tenyallas, jogiindokolas, zaro, birosagneve,
+            birosagSzekhelye, ugyTipus, eljarasTipus, eljarasSzakasz, targy, dontes, dontesmasodfok, donteselsofok,
+            keresettSzovegResz;
 
     public Decision(String ugyszam, String hatarozatStringClean, String bevezeto, String rendelkezo, String tenyallas,
-                    String jogiindokolas,String zaro, String birosagneve, String birosagSzekhelye, String ugyTipus, String eljarasTipus,
-                    String eljarasSzakasz, String targy, String dontes, String dontesmasodfok, String donteselsofok) {
+                    String jogiindokolas, String zaro, String birosagneve, String birosagSzekhelye, String ugyTipus,
+                    String eljarasTipus,
+                    String eljarasSzakasz, String targy, String dontes, String dontesmasodfok, String donteselsofok,
+                    String keresettSzovegResz) {
         this.ugyszam = ugyszam;
         this.hatarozatStringClean = hatarozatStringClean;
         this.bevezeto = bevezeto;
@@ -24,69 +27,7 @@ public final class Decision {
         this.dontes = dontes;
         this.dontesmasodfok = dontesmasodfok;
         this.donteselsofok = donteselsofok;
+        this.keresettSzovegResz = keresettSzovegResz;
     }
 
-    public String getUgyszam() {
-        return ugyszam;
-    }
-
-    public String getHatarozatStringClean() {
-        return hatarozatStringClean;
-    }
-
-    public String getBevezeto() {
-        return bevezeto;
-    }
-
-    public String getRendelkezo() {
-        return rendelkezo;
-    }
-
-    public String getTenyallas() {
-        return tenyallas;
-    }
-
-    public String getJogiindokolas() {
-        return jogiindokolas;
-    }
-
-    public String getZaro() {
-        return zaro;
-    }
-
-    public String getBirosagneve() {
-        return birosagneve;
-    }
-
-    public String getBirosagSzekhelye() {
-        return birosagSzekhelye;
-    }
-
-    public String getUgyTipus() {
-        return ugyTipus;
-    }
-
-    public String getEljarasTipus() {
-        return eljarasTipus;
-    }
-
-    public String getEljarasSzakasz() {
-        return eljarasSzakasz;
-    }
-
-    public String getTargy() {
-        return targy;
-    }
-
-    public String getDontes() {
-        return dontes;
-    }
-
-    public String getDontesmasodfok() {
-        return dontesmasodfok;
-    }
-
-    public String getDonteselsofok() {
-        return donteselsofok;
-    }
 }

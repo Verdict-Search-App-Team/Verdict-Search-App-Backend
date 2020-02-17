@@ -9,6 +9,7 @@ import javax.persistence.Table;
 @Table(name = "pp_felulvizsgalat")
 public class DecisionDto {
 
+
     @Id
     @Column(name = "szam")
     public String ugyszam;
@@ -57,4 +58,12 @@ public class DecisionDto {
 
     @Column(name = "donteselsofok")
     public String donteselsofok;
+
+    public String keresettSzovegResz;
+
+    public DecisionDto() {
+        this.keresettSzovegResz = null;
+    }
+
+
 }

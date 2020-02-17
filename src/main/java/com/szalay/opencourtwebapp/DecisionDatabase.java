@@ -15,7 +15,7 @@ public class DecisionDatabase {
         this.myDecisionList = new ArrayList<>();
         myDecisionList.add(new Decision("fvyfd", "fvyfd", "fvyfd", "fvyfd", "fvyfd",
                 "fvyfd", "fvyfd", "fvyfd", "fvyfd", "fvyfd", "fvyfd",
-                "fvyfd", "fvyfd", "fvyfd", "fvyfd", "fvyfd"));
+                "fvyfd", "fvyfd", "fvyfd", "fvyfd", "fvyfd", "sdfgrg"));
     }
 
     public List<Decision> getDecisions() {
@@ -100,7 +100,8 @@ public class DecisionDatabase {
                                     rs.getString("targy"),
                                     rs.getString("dontes"),
                                     rs.getString("dontesmasodfok"),
-                                    rs.getString("donteselsofok")
+                                    rs.getString("donteselsofok"),
+                            "saerg"
                             )
                     );
 

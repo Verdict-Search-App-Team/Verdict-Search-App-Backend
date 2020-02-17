@@ -11,7 +11,7 @@
             border: 1px solid black;
             margin: 20px;
             padding: 10px;
-            width: 300px;
+            width: 1000px;
         }
     </style>
 </head>
@@ -21,9 +21,12 @@
       <div class="result">
         <p> Ügyszám: {{ugyszam}}</p>
         <p> Bíróság neve: {{birosagneve}}</p>
-        <button class="btn btn-outline-success btn-sm">Megnyitás</button>
+          <p> {{{keresettSzovegResz}}}</p>
+
+          <button class="btn btn-outline-success btn-sm">Megnyitás</button>
     </div>
 </form>
+
 {{/results}}
 </body>
 </html>

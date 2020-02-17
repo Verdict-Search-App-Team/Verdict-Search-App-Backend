@@ -1,27 +1,25 @@
 package com.szalay.opencourtwebapp;
 
+import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 class HomeController {
 
     //private static DecisionDatabase decisionDatabase = new DecisionDatabase();
     private final DecisionRepository decisionRepository;
+    private List<Decision> resultsList;
+//    private String mainSearchedTerm = null;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
+        this.resultsList = new ArrayList();
     }
 
-//    @RequestMapping("/results")
-//    public @ResponseBody ModelAndView results() {
-//        model.put("results", decisionDatabase.getDecisions());
-//        return  new ModelAndView("results", model);
-//    }
 
     @RequestMapping("/home")
     @ResponseBody
@@ -29,13 +27,6 @@ class HomeController {
         Map<String, Object> model = new HashMap<>();
         return new ModelAndView("home", model);
     }
-
-//    @RequestMapping(value="/reset", method = RequestMethod.POST)
-//    public @ResponseBody String reset() {
-//        decisionDatabase.reset();
-//        return "redirect: home";
-//    }
-
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) throws ClassNotFoundException {
@@ -45,41 +36,31 @@ class HomeController {
         if (hatarozatreszChoice != null) {
             switch (hatarozatreszChoice) {
                 case "teljeshatarozatban":
-                    model.put("results", decisionRepository.findByHatarozatStringCleanContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByHatarozatStringCleanContaining(searchedTerm), searchedTerm);
                     break;
                 case "bevezetoben":
-                    model.put("results", decisionRepository.findByBevezetoContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByBevezetoContaining(searchedTerm), searchedTerm);
                     break;
                 case "rendelkezoben":
-                    model.put("results", decisionRepository.findByRendelkezoContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByRendelkezoContaining(searchedTerm), searchedTerm);
                     break;
                 case "tenyallasban":
-                    model.put("results", decisionRepository.findByTenyallasContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByTenyallasContaining(searchedTerm), searchedTerm);
                     break;
                 case "jogiindokolasban":
-                    model.put("results", decisionRepository.findByJogiindokolasContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByJogiindokolasContaining(searchedTerm), searchedTerm);
                     break;
                 case "zaroreszben":
-                    model.put("results", decisionRepository.findByZaroContaining(searchedTerm));
+                    fillResultsList(decisionRepository.findByZaroContaining(searchedTerm), searchedTerm);
                     break;
             }
+            model.put("results", resultsList);
         }
+
         return new ModelAndView("results", model);
+
     }
 
-//    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public String home() {
-//        return "home";
-//    }
-
-    String URLem = "/valami";
-
-//    @RequestMapping(value = "/decisions", method = RequestMethod.POST)
-//    public ModelAndView decision(@RequestParam String ugyszam) {
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
-//        return new ModelAndView("decisions", model);
-//    }
 
     @RequestMapping("/{ugyszam}")
     public ModelAndView decision(@PathVariable("ugyszam") String ugyszam) {
@@ -88,18 +69,73 @@ class HomeController {
         return new ModelAndView("decisions", model);
     }
 
+    public void fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
+        String context = "getContext method while ciklus nem futott";
+        String[] myMondatArray = null;
+        ListIterator<DecisionDto> decisionDtoListIterator = decisionDtoList.listIterator();
+        try {
+            while (decisionDtoListIterator.hasNext()) {
 
-//    @RequestMapping(value="/url/{id}", method=RequestMethod.GET)
-//    public String method(@PathVariable("id") String id) {
-//        System.out.println("the url value : "+id );
-//        return "Whatever";
-//    }
+//            if(
+//            decisionDtoListIterator.next().ugyszam == null ||
+//                    decisionDtoListIterator.next().hatarozatStringClean == null ||
+//                    decisionDtoListIterator.next().bevezeto == null ||
+//                    decisionDtoListIterator.next().rendelkezo == null ||
+//                    decisionDtoListIterator.next().tenyallas == null ||
+//                    decisionDtoListIterator.next().jogiindokolas == null ||
+//                    decisionDtoListIterator.next().zaro == null ||
+//                    decisionDtoListIterator.next().birosagneve == null ||
+//                    decisionDtoListIterator.next().birosagSzekhelye == null ||
+//                    decisionDtoListIterator.next().ugyTipus == null ||
+//                    decisionDtoListIterator.next().eljarasTipus,
+//                    decisionDtoListIterator.next().eljarasSzakasz,
+//                    decisionDtoListIterator.next().targy,
+//                    decisionDtoListIterator.next().dontes,
+//                    decisionDtoListIterator.next().dontesmasodfok,
+//                    decisionDtoListIterator.next().donteselsofok,
+//
+//
+//            decisionDtoListIterator.next() == null) {
+//                break;
+//            }
+
+                myMondatArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
+
+                for (String mondat : myMondatArray) {
+                    if (mondat.contains(searchedTerm)) {
+                        context = "[...] " + " " + mondat + " [...]";
+                        context = context.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
+                        System.out.println(context);
+
+                    }
+
+                }
+
+                resultsList.add(new Decision(
+                        decisionDtoListIterator.next().ugyszam,
+                        decisionDtoListIterator.next().hatarozatStringClean,
+                        decisionDtoListIterator.next().bevezeto,
+                        decisionDtoListIterator.next().rendelkezo,
+                        decisionDtoListIterator.next().tenyallas,
+                        decisionDtoListIterator.next().jogiindokolas,
+                        decisionDtoListIterator.next().zaro,
+                        decisionDtoListIterator.next().birosagneve,
+                        decisionDtoListIterator.next().birosagSzekhelye,
+                        decisionDtoListIterator.next().ugyTipus,
+                        decisionDtoListIterator.next().eljarasTipus,
+                        decisionDtoListIterator.next().eljarasSzakasz,
+                        decisionDtoListIterator.next().targy,
+                        decisionDtoListIterator.next().dontes,
+                        decisionDtoListIterator.next().dontesmasodfok,
+                        decisionDtoListIterator.next().donteselsofok,
+                        context
+                ));
+            }
+        } catch (NoSuchElementException exception) {
+            System.out.println("NoSuchElementException");
+        }
 
 
-//    @RequestMapping(value = "/carsdeleted", method = RequestMethod.POST)
-//    public String search(@RequestParam String licence) {
-//        decisionDatabase.removeCar(licence);
-//        return "redirect:/cars";
-//    }
+    }
 
 }
