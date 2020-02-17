@@ -81,8 +81,8 @@ class HomeController {
 //        return new ModelAndView("decisions", model);
 //    }
 
-    @RequestMapping(value = "/url/{id}", method=RequestMethod.POST)
-    public ModelAndView decision(@PathVariable("id") String birosagneve, @RequestParam String ugyszam) {
+    @RequestMapping("/{ugyszam}")
+    public ModelAndView decision(@PathVariable("ugyszam") String ugyszam) {
         Map<String, Object> model = new HashMap<>();
         model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
         return new ModelAndView("decisions", model);

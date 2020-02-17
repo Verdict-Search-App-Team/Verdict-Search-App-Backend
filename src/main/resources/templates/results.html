@@ -17,11 +17,11 @@
 </head>
 <body>
 {{#results}}
-<form action= "/url/{{birosagneve}}" method="post">
+<form action= "/{{ugyszam}}" method="get">
       <div class="result">
         <p> Ügyszám: {{ugyszam}}</p>
         <p> Bíróság neve: {{birosagneve}}</p>
-        <button name="ugyszam" value="{{ugyszam}}" value="{{birosagneve}}" class="btn btn-outline-success btn-sm">Megnyitás</button>
+        <button class="btn btn-outline-success btn-sm">Megnyitás</button>
     </div>
 </form>
 {{/results}}
