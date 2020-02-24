@@ -4,6 +4,7 @@ import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
@@ -12,21 +13,25 @@ class HomeController {
 
     private final DecisionRepository decisionRepository;
     private List<DecisionSearchResult> resultsList = new ArrayList();
+    private List<MyUUID> uuidList = new ArrayList();
+
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
     }
 
     @RequestMapping("/home")
-    @ResponseBody
     public ModelAndView home() {
         Map<String, Object> model = new HashMap<>();
+        uuidList.clear();
+        uuidList.add(new MyUUID());
+        model.put("home", uuidList);
         return new ModelAndView("home", model);
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
-        Map<String, Object> model = new HashMap<>();
+
+    @RequestMapping(value="/search/{uuid}", method = RequestMethod.POST)
+    public RedirectView search(@PathVariable("uuid") UUID uuid, @RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
         if (hatarozatreszChoice != null) {
             switch (hatarozatreszChoice) {
                 case "teljeshatarozatban":
@@ -48,14 +53,21 @@ class HomeController {
                     fillResultsList(decisionRepository.findByZaroContaining(searchedTerm), searchedTerm);
                     break;
             }
-            model.put("results", resultsList);
 
         }
-
-        return new ModelAndView("results", model);
+        RedirectView redirectView = new RedirectView();
+        redirectView.setContextRelative(true);
+        redirectView.setUrl("/results/" + uuid);
+        return redirectView;
 
     }
 
+    @RequestMapping("/results/{uuid}")
+    public ModelAndView results(@PathVariable UUID uuid) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("results", resultsList);
+        return new ModelAndView("results", model);
+    }
 
     @RequestMapping("/{ugyszam}")
     public ModelAndView decision(@PathVariable("ugyszam") String ugyszam) {
@@ -80,7 +92,6 @@ class HomeController {
                     }
 
                 }
-
                 resultsList.add(new DecisionSearchResult(decisionDtoListIterator.next(), contextString));
 
             } catch (NoSuchElementException exception) {
