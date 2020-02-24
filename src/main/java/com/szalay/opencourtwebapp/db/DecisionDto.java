@@ -59,11 +59,4 @@ public class DecisionDto {
     @Column(name = "donteselsofok")
     public String donteselsofok;
 
-    public String keresettSzovegResz;
-
-    public DecisionDto() {
-        this.keresettSzovegResz = null;
-    }
-
-
 }

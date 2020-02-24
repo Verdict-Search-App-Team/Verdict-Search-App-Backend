@@ -10,10 +10,8 @@ import java.util.*;
 @RestController
 class HomeController {
 
-    //private static DecisionDatabase decisionDatabase = new DecisionDatabase();
     private final DecisionRepository decisionRepository;
-    private List<Decision> resultsList;
-//    private String mainSearchedTerm = null;
+    private List<DecisionSearchResult> resultsList;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
@@ -29,10 +27,9 @@ class HomeController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) throws ClassNotFoundException {
+    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice)
+            throws ClassNotFoundException {
         Map<String, Object> model = new HashMap<>();
-        System.out.println(hatarozatreszChoice);
-        //TODO decisionDatabase.fullSearch(searchedTerm);
         if (hatarozatreszChoice != null) {
             switch (hatarozatreszChoice) {
                 case "teljeshatarozatban":
@@ -55,6 +52,7 @@ class HomeController {
                     break;
             }
             model.put("results", resultsList);
+
         }
 
         return new ModelAndView("results", model);
@@ -73,32 +71,9 @@ class HomeController {
         String context = "getContext method while ciklus nem futott";
         String[] myMondatArray = null;
         ListIterator<DecisionDto> decisionDtoListIterator = decisionDtoList.listIterator();
-        try {
-            while (decisionDtoListIterator.hasNext()) {
 
-//            if(
-//            decisionDtoListIterator.next().ugyszam == null ||
-//                    decisionDtoListIterator.next().hatarozatStringClean == null ||
-//                    decisionDtoListIterator.next().bevezeto == null ||
-//                    decisionDtoListIterator.next().rendelkezo == null ||
-//                    decisionDtoListIterator.next().tenyallas == null ||
-//                    decisionDtoListIterator.next().jogiindokolas == null ||
-//                    decisionDtoListIterator.next().zaro == null ||
-//                    decisionDtoListIterator.next().birosagneve == null ||
-//                    decisionDtoListIterator.next().birosagSzekhelye == null ||
-//                    decisionDtoListIterator.next().ugyTipus == null ||
-//                    decisionDtoListIterator.next().eljarasTipus,
-//                    decisionDtoListIterator.next().eljarasSzakasz,
-//                    decisionDtoListIterator.next().targy,
-//                    decisionDtoListIterator.next().dontes,
-//                    decisionDtoListIterator.next().dontesmasodfok,
-//                    decisionDtoListIterator.next().donteselsofok,
-//
-//
-//            decisionDtoListIterator.next() == null) {
-//                break;
-//            }
-
+        while (decisionDtoListIterator.hasNext()) {
+            try {
                 myMondatArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
 
                 for (String mondat : myMondatArray) {
@@ -111,31 +86,16 @@ class HomeController {
 
                 }
 
-                resultsList.add(new Decision(
-                        decisionDtoListIterator.next().ugyszam,
-                        decisionDtoListIterator.next().hatarozatStringClean,
-                        decisionDtoListIterator.next().bevezeto,
-                        decisionDtoListIterator.next().rendelkezo,
-                        decisionDtoListIterator.next().tenyallas,
-                        decisionDtoListIterator.next().jogiindokolas,
-                        decisionDtoListIterator.next().zaro,
-                        decisionDtoListIterator.next().birosagneve,
-                        decisionDtoListIterator.next().birosagSzekhelye,
-                        decisionDtoListIterator.next().ugyTipus,
-                        decisionDtoListIterator.next().eljarasTipus,
-                        decisionDtoListIterator.next().eljarasSzakasz,
-                        decisionDtoListIterator.next().targy,
-                        decisionDtoListIterator.next().dontes,
-                        decisionDtoListIterator.next().dontesmasodfok,
-                        decisionDtoListIterator.next().donteselsofok,
-                        context
-                ));
+                resultsList.add(new DecisionSearchResult(decisionDtoListIterator.next(), context));
+
+            } catch (NoSuchElementException exception) {
+                System.out.println("NoSuchElementException");
             }
-        } catch (NoSuchElementException exception) {
-            System.out.println("NoSuchElementException");
+
+
         }
 
-
     }
+
 
 }

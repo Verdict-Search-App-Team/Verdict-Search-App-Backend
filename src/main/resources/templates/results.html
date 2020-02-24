@@ -17,10 +17,10 @@
 </head>
 <body>
 {{#results}}
-<form action= "/{{ugyszam}}" method="get">
+<form action= "/{{decisionDto.ugyszam}}" method="get">
       <div class="result">
-        <p> Ügyszám: {{ugyszam}}</p>
-        <p> Bíróság neve: {{birosagneve}}</p>
+        <p> Ügyszám: {{decisionDto.ugyszam}}</p>
+        <p> Bíróság neve: {{decisionDto.birosagneve}}</p>
           <p> {{{keresettSzovegResz}}}</p>
 
           <button class="btn btn-outline-success btn-sm">Megnyitás</button>
