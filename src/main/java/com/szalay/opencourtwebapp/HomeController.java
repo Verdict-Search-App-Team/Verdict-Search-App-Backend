@@ -71,9 +71,9 @@ class HomeController {
         while (decisionDtoListIterator.hasNext()) {
             try {
                 tempParagraphArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
-                for (String mondat : tempParagraphArray) {
-                    if (mondat.contains(searchedTerm)) {
-                        contextString = "[...] " + " " + mondat + " [...]";
+                for (String paragraph : tempParagraphArray) {
+                    if (paragraph.contains(searchedTerm)) {
+                        contextString = "[...] " + " " + paragraph + " [...]";
                         contextString = contextString.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
                         System.out.println(contextString);
 
@@ -85,7 +85,7 @@ class HomeController {
 
             } catch (NoSuchElementException exception) {
                 System.out.println("NoSuchElementException");
-                
+
             }
 
 
