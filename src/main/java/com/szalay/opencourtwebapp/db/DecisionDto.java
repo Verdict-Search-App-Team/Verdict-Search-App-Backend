@@ -9,7 +9,6 @@ import javax.persistence.Table;
 @Table(name = "pp_felulvizsgalat")
 public class DecisionDto {
 
-
     @Id
     @Column(name = "szam")
     public String ugyszam;

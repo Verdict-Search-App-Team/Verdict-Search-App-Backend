@@ -11,13 +11,11 @@ import java.util.*;
 class HomeController {
 
     private final DecisionRepository decisionRepository;
-    private List<DecisionSearchResult> resultsList;
+    private List<DecisionSearchResult> resultsList = new ArrayList();
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        this.resultsList = new ArrayList();
     }
-
 
     @RequestMapping("/home")
     @ResponseBody
@@ -27,8 +25,7 @@ class HomeController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice)
-            throws ClassNotFoundException {
+    public ModelAndView results(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
         Map<String, Object> model = new HashMap<>();
         if (hatarozatreszChoice != null) {
             switch (hatarozatreszChoice) {
@@ -68,28 +65,27 @@ class HomeController {
     }
 
     public void fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
-        String context = "getContext method while ciklus nem futott";
-        String[] myMondatArray = null;
+        String contextString = "ContextString variable is empty";
+        String[] tempParagraphArray;
         ListIterator<DecisionDto> decisionDtoListIterator = decisionDtoList.listIterator();
-
         while (decisionDtoListIterator.hasNext()) {
             try {
-                myMondatArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
-
-                for (String mondat : myMondatArray) {
+                tempParagraphArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
+                for (String mondat : tempParagraphArray) {
                     if (mondat.contains(searchedTerm)) {
-                        context = "[...] " + " " + mondat + " [...]";
-                        context = context.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
-                        System.out.println(context);
+                        contextString = "[...] " + " " + mondat + " [...]";
+                        contextString = contextString.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
+                        System.out.println(contextString);
 
                     }
 
                 }
 
-                resultsList.add(new DecisionSearchResult(decisionDtoListIterator.next(), context));
+                resultsList.add(new DecisionSearchResult(decisionDtoListIterator.next(), contextString));
 
             } catch (NoSuchElementException exception) {
                 System.out.println("NoSuchElementException");
+                
             }
 
 

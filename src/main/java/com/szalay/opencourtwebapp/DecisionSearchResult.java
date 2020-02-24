@@ -2,10 +2,10 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 
-public class DecisionSearchResult {
+class DecisionSearchResult {
 
-    public DecisionDto decisionDto;
-    public String keresettSzovegResz;
+    DecisionDto decisionDto;
+    String keresettSzovegResz;
 
     public DecisionSearchResult(DecisionDto decisionDto, String keresettSzovegResz) {
         this.decisionDto = decisionDto;
