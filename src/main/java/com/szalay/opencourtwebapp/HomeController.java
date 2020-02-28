@@ -21,7 +21,12 @@ class HomeController {
 
     @RequestMapping("/home")
     public ModelAndView home() {
-        return new ModelAndView("home");
+        List<DatabaseInformation> databaseInformationList = new ArrayList<>();
+        databaseInformationList.add(new DatabaseInformation(decisionRepository.count()));
+        System.out.println(decisionRepository.count());
+        Map<String, Object> model = new HashMap<>();
+        model.put("home", databaseInformationList);
+        return new ModelAndView("home", model);
     }
 
 

@@ -49,9 +49,10 @@
 
     </nav>
 
+    {{#home}}
     <form action="/results" method="get">
-
         <div class="form-group">
+            <p> Határozatok száma: {{numDecisions}}</p>
             <label for="searchedTermjbjihnj"></label>
             <input id="searchedTermjbjihnj" name="searchedTerm" type="text" size="100" aria-describedby="emailHelp" placeholder="Keresett szöveg">
             <small id="searchedTermHelp" class="form-text text-muted">Szabad szöveges keresés</small>
@@ -72,8 +73,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Keresés</button>
     </form>
-
-
+    {{/home}}
 
 
     <!-- R O W   1 -->

@@ -27,4 +27,7 @@ public interface DecisionRepository extends CrudRepository<DecisionDto, String> 
     List<DecisionDto> findByDonteselsofokContaining(String query);
     List<DecisionDto> findByHatarozatStringCleanContaining(String query);
 
+    long count = 0;
+
+
 }
