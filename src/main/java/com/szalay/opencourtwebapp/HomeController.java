@@ -2,9 +2,11 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
@@ -12,9 +14,6 @@ import java.util.*;
 class HomeController {
 
     private final DecisionRepository decisionRepository;
-    private List<DecisionSearchResult> resultsList = new ArrayList();
-    private List<MyUUID> uuidList = new ArrayList();
-
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
@@ -22,51 +21,41 @@ class HomeController {
 
     @RequestMapping("/home")
     public ModelAndView home() {
-        Map<String, Object> model = new HashMap<>();
-        uuidList.clear();
-        uuidList.add(new MyUUID());
-        model.put("home", uuidList);
-        return new ModelAndView("home", model);
+        return new ModelAndView("home");
     }
 
 
-    @RequestMapping(value="/search/{uuid}", method = RequestMethod.POST)
-    public RedirectView search(@PathVariable("uuid") UUID uuid, @RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
+    @RequestMapping("/results")
+    public ModelAndView search(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
+        List<DecisionDto> decisionDtoList = new ArrayList<>();
         if (hatarozatreszChoice != null) {
             switch (hatarozatreszChoice) {
                 case "teljeshatarozatban":
-                    fillResultsList(decisionRepository.findByHatarozatStringCleanContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByHatarozatStringCleanContaining(searchedTerm);
                     break;
                 case "bevezetoben":
-                    fillResultsList(decisionRepository.findByBevezetoContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByBevezetoContaining(searchedTerm);
                     break;
                 case "rendelkezoben":
-                    fillResultsList(decisionRepository.findByRendelkezoContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByRendelkezoContaining(searchedTerm);
                     break;
                 case "tenyallasban":
-                    fillResultsList(decisionRepository.findByTenyallasContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByTenyallasContaining(searchedTerm);
                     break;
                 case "jogiindokolasban":
-                    fillResultsList(decisionRepository.findByJogiindokolasContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByJogiindokolasContaining(searchedTerm);
                     break;
                 case "zaroreszben":
-                    fillResultsList(decisionRepository.findByZaroContaining(searchedTerm), searchedTerm);
+                    decisionDtoList = decisionRepository.findByZaroContaining(searchedTerm);
                     break;
             }
 
         }
-        RedirectView redirectView = new RedirectView();
-        redirectView.setContextRelative(true);
-        redirectView.setUrl("/results/" + uuid);
-        return redirectView;
-
-    }
-
-    @RequestMapping("/results/{uuid}")
-    public ModelAndView results(@PathVariable UUID uuid) {
+        List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
         Map<String, Object> model = new HashMap<>();
         model.put("results", resultsList);
         return new ModelAndView("results", model);
+
     }
 
     @RequestMapping("/{ugyszam}")
@@ -76,31 +65,30 @@ class HomeController {
         return new ModelAndView("decisions", model);
     }
 
-    public void fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
+    public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
+        List<DecisionSearchResult> resultsList = new ArrayList();
         String contextString = "ContextString variable is empty";
-        String[] tempParagraphArray;
-        ListIterator<DecisionDto> decisionDtoListIterator = decisionDtoList.listIterator();
-        while (decisionDtoListIterator.hasNext()) {
+        for (DecisionDto decisionDto : decisionDtoList) {
+            String[] tempParagraphArray;
             try {
-                tempParagraphArray = decisionDtoListIterator.next().hatarozatStringClean.split("<br>");
+                tempParagraphArray = decisionDto.hatarozatStringClean.split("<br>");
                 for (String paragraph : tempParagraphArray) {
                     if (paragraph.contains(searchedTerm)) {
                         contextString = "[...] " + " " + paragraph + " [...]";
                         contextString = contextString.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
-                        System.out.println(contextString);
 
                     }
 
                 }
-                resultsList.add(new DecisionSearchResult(decisionDtoListIterator.next(), contextString));
+                resultsList.add(new DecisionSearchResult(decisionDto, contextString));
 
             } catch (NoSuchElementException exception) {
                 System.out.println("NoSuchElementException");
 
             }
 
-
         }
+        return resultsList;
 
     }
 
