@@ -21,9 +21,9 @@
       <div class="result">
         <p> Ügyszám: {{decisionDto.ugyszam}}</p>
         <p> Bíróság neve: {{decisionDto.birosagneve}}</p>
-          <p> {{{keresettSzovegResz}}}</p>
+          <p> {{{searchContextString}}}</p>
 
-          <button class="btn btn-outline-success btn-sm">Megnyitás</button>
+          <button class="btn btn-outline-success btn-sm" name="searchedTerm" value={{searchedTerm}}>Megnyitás</button>
     </div>
 </form>
 

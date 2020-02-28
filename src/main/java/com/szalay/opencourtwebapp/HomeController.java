@@ -64,9 +64,13 @@ class HomeController {
     }
 
     @RequestMapping("/{ugyszam}")
-    public ModelAndView decision(@PathVariable("ugyszam") String ugyszam) {
+    public ModelAndView decision(@PathVariable("ugyszam") String ugyszam, @RequestParam String searchedTerm) {
         Map<String, Object> model = new HashMap<>();
-        model.put("decisions", decisionRepository.findByUgyszam(ugyszam));
+        String decisionString = decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatStringClean.replace(searchedTerm,
+                "<mark>" + searchedTerm + "</mark>");
+        List<Decision> decisionList = new ArrayList();
+        decisionList.add(new Decision(decisionString));
+        model.put("decisions", decisionList);
         return new ModelAndView("decisions", model);
     }
 
@@ -85,7 +89,7 @@ class HomeController {
                     }
 
                 }
-                resultsList.add(new DecisionSearchResult(decisionDto, contextString));
+                resultsList.add(new DecisionSearchResult(decisionDto, contextString, searchedTerm));
 
             } catch (NoSuchElementException exception) {
                 System.out.println("NoSuchElementException");
