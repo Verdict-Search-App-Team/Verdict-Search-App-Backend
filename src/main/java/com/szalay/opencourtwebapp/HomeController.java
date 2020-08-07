@@ -31,31 +31,32 @@ class HomeController {
 
 
     @RequestMapping("/results")
-    public ModelAndView search(@RequestParam String searchedTerm, @RequestParam String hatarozatreszChoice) {
+    public ModelAndView search(@RequestParam String searchedTerm) {
         List<DecisionDto> decisionDtoList = new ArrayList<>();
-        if (hatarozatreszChoice != null) {
-            switch (hatarozatreszChoice) {
-                case "teljeshatarozatban":
-                    decisionDtoList = decisionRepository.findByHatarozatStringCleanContaining(searchedTerm);
-                    break;
-                case "bevezetoben":
-                    decisionDtoList = decisionRepository.findByBevezetoContaining(searchedTerm);
-                    break;
-                case "rendelkezoben":
-                    decisionDtoList = decisionRepository.findByRendelkezoContaining(searchedTerm);
-                    break;
-                case "tenyallasban":
-                    decisionDtoList = decisionRepository.findByTenyallasContaining(searchedTerm);
-                    break;
-                case "jogiindokolasban":
-                    decisionDtoList = decisionRepository.findByJogiindokolasContaining(searchedTerm);
-                    break;
-                case "zaroreszben":
-                    decisionDtoList = decisionRepository.findByZaroContaining(searchedTerm);
-                    break;
-            }
+        decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
+//        if (hatarozatreszChoice != null) {
+//            switch (hatarozatreszChoice) {
+//                case "teljeshatarozatban":
+//                    decisionDtoList = decisionRepository.findByHatarozatStringCleanContaining(searchedTerm);
+//                    break;
+//                case "bevezetoben":
+//                    decisionDtoList = decisionRepository.findByBevezetoContaining(searchedTerm);
+//                    break;
+//                case "rendelkezoben":
+//                    decisionDtoList = decisionRepository.findByRendelkezoContaining(searchedTerm);
+//                    break;
+//                case "tenyallasban":
+//                    decisionDtoList = decisionRepository.findByTenyallasContaining(searchedTerm);
+//                    break;
+//                case "jogiindokolasban":
+//                    decisionDtoList = decisionRepository.findByJogiindokolasContaining(searchedTerm);
+//                    break;
+//                case "zaroreszben":
+//                    decisionDtoList = decisionRepository.findByZaroContaining(searchedTerm);
+//                    break;
+//            }
 
-        }
+//        }
         List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
         Map<String, Object> model = new HashMap<>();
         model.put("results", resultsList);
@@ -66,7 +67,7 @@ class HomeController {
     @RequestMapping("/{ugyszam}")
     public ModelAndView decision(@PathVariable("ugyszam") String ugyszam, @RequestParam String searchedTerm) {
         Map<String, Object> model = new HashMap<>();
-        String decisionString = decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatStringClean.replace(searchedTerm,
+        String decisionString = decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg.replace(searchedTerm,
                 "<mark>" + searchedTerm + "</mark>");
         List<Decision> decisionList = new ArrayList();
         decisionList.add(new Decision(decisionString));
@@ -80,7 +81,7 @@ class HomeController {
         for (DecisionDto decisionDto : decisionDtoList) {
             String[] tempParagraphArray;
             try {
-                tempParagraphArray = decisionDto.hatarozatStringClean.split("<br>");
+                tempParagraphArray = decisionDto.hatarozatszoveg.split("<br>");
                 for (String paragraph : tempParagraphArray) {
                     if (paragraph.contains(searchedTerm)) {
                         contextString = "[...] " + " " + paragraph + " [...]";

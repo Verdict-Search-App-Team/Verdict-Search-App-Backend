@@ -12,22 +12,17 @@ public interface DecisionRepository extends CrudRepository<DecisionDto, String> 
     Search methods
      */
     List<DecisionDto> findByUgyszamContaining(String query);
-    List<DecisionDto> findByBevezetoContaining(String query);
-    List<DecisionDto> findByRendelkezoContaining(String query);
-    List<DecisionDto> findByTenyallasContaining(String query);
-    List<DecisionDto> findByJogiindokolasContaining(String query);
-    List<DecisionDto> findByZaroContaining(String query);
-    List<DecisionDto> findByBirosagneveContaining(String query);
-    List<DecisionDto> findByUgyTipusContaining(String query);
-    List<DecisionDto> findByEljarasTipusContaining(String query);
-    List<DecisionDto> findByEljarasSzakaszContaining(String query);
-    List<DecisionDto> findByTargyContaining(String query);
-    List<DecisionDto> findByDontesContaining(String query);
-    List<DecisionDto> findByDontesmasodfokContaining(String query);
-    List<DecisionDto> findByDonteselsofokContaining(String query);
-    List<DecisionDto> findByHatarozatStringCleanContaining(String query);
-
-    long count = 0;
+    List<DecisionDto> findByBirosagContaining(String query);
+    List<DecisionDto> findByUgytipusContaining(String query);
+    List<DecisionDto> findByHatarozatszovegContaining(String query);
+//    List<DecisionDto> findByhatarozatdatumaContaining(String query);
+//    List<DecisionDto> findByEljaraseveContaining(String query);
+//    List<DecisionDto> findByTargyContaining(String query);
+//    List<DecisionDto> findByKulcsszavaknyelvtaniContaining(String query);
+//    List<DecisionDto> findByKulcsszavakkeresesContaining(String query);
+//    List<DecisionDto> findByMegtekintesekszamaContaining(String query);
+//    List<DecisionDto> findByKiemeltszovegContaining(String query);
+//    List<DecisionDto> findByMegjegyzesekContaining(String query);
 
 
 }

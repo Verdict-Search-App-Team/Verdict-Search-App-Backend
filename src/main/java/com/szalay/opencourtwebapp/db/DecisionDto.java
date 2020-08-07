@@ -4,58 +4,47 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
-@Table(name = "pp_felulvizsgalat")
+@Table(name = "hu_dontesek")
 public class DecisionDto {
 
     @Id
-    @Column(name = "szam")
+    @Column(name = "ugyszam")
     public String ugyszam;
 
-    @Column(name = "hatarozatszoveg")
-    public String hatarozatStringClean;
-
-    @Column(name = "bevezeto")
-    public String bevezeto;
-
-    @Column(name = "rendelkezo")
-    public String rendelkezo;
-
-    @Column(name = "tenyallas")
-    public String tenyallas;
-
-    @Column(name = "jogiindokolas")
-    public String jogiindokolas;
-
-    @Column(name = "zaro")
-    public String zaro;
-
     @Column(name = "birosag")
-    public String birosagneve;
-
-    @Column(name = "szekhely")
-    public String birosagSzekhelye;
+    public String birosag;
 
     @Column(name = "ugytipus")
-    public String ugyTipus;
+    public String ugytipus;
 
-    @Column(name = "eljarastipus")
-    public String eljarasTipus;
+    @Column(name = "hatarozatszoveg")
+    public String hatarozatszoveg;
 
-    @Column(name = "eljarasszakasz")
-    public String eljarasSzakasz;
+    @Column(name = "hatarozat_datuma")
+    public Date hatarozatdatuma;
+
+    @Column(name = "eljaras_eve")
+    public String eljaraseve;
 
     @Column(name = "targy")
     public String targy;
 
-    @Column(name = "dontes")
-    public String dontes;
+    @Column(name = "kulcsszavak_nyelvtani")
+    public String kulcsszavaknyelvtani;
 
-    @Column(name = "dontesmasodfok")
-    public String dontesmasodfok;
+    @Column(name = "kulcsszavak_kereses")
+    public String kulcsszavakkereses;
 
-    @Column(name = "donteselsofok")
-    public String donteselsofok;
+    @Column(name = "megtekintesek_szama")
+    public String megtekintesekszama;
+
+    @Column(name = "kiemelt_szoveg")
+    public String kiemeltszoveg;
+
+    @Column(name = "megjegyzesek")
+    public String megjegyzesek;
 
 }
