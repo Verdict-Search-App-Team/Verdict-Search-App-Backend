@@ -7,4 +7,8 @@ public class Decision {
     public Decision(String decisionString) {
         this.decisionString = decisionString;
     }
+
+    public String getDecisionString() {
+        return decisionString;
+    }
 }

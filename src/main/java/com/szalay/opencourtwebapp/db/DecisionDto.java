@@ -1,16 +1,15 @@
 package com.szalay.opencourtwebapp.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "hu_dontesek")
-public class DecisionDto {
+public class DecisionDto implements Serializable {
 
     @Id
+    //@GeneratedValue
     @Column(name = "ugyszam")
     public String ugyszam;
 

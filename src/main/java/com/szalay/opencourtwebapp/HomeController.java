@@ -2,13 +2,11 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 class HomeController {
@@ -19,60 +17,25 @@ class HomeController {
         this.decisionRepository = decisionRepository;
     }
 
-    @RequestMapping("/home")
-    public ModelAndView home() {
-        List<DatabaseInformation> databaseInformationList = new ArrayList<>();
-        databaseInformationList.add(new DatabaseInformation(decisionRepository.count()));
-        System.out.println(decisionRepository.count());
-        Map<String, Object> model = new HashMap<>();
-        model.put("home", databaseInformationList);
-        return new ModelAndView("home", model);
+    @GetMapping("/home")
+    public List<Object> home() {
+        List<Object> data = new ArrayList<>();
+        data.add(decisionRepository.count());
+        return data;
     }
 
-
-    @RequestMapping("/results")
-    public ModelAndView search(@RequestParam String searchedTerm) {
-        List<DecisionDto> decisionDtoList = new ArrayList<>();
-        decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
-//        if (hatarozatreszChoice != null) {
-//            switch (hatarozatreszChoice) {
-//                case "teljeshatarozatban":
-//                    decisionDtoList = decisionRepository.findByHatarozatStringCleanContaining(searchedTerm);
-//                    break;
-//                case "bevezetoben":
-//                    decisionDtoList = decisionRepository.findByBevezetoContaining(searchedTerm);
-//                    break;
-//                case "rendelkezoben":
-//                    decisionDtoList = decisionRepository.findByRendelkezoContaining(searchedTerm);
-//                    break;
-//                case "tenyallasban":
-//                    decisionDtoList = decisionRepository.findByTenyallasContaining(searchedTerm);
-//                    break;
-//                case "jogiindokolasban":
-//                    decisionDtoList = decisionRepository.findByJogiindokolasContaining(searchedTerm);
-//                    break;
-//                case "zaroreszben":
-//                    decisionDtoList = decisionRepository.findByZaroContaining(searchedTerm);
-//                    break;
-//            }
-
-//        }
+    @GetMapping("/results")
+    public List<DecisionSearchResult> search(@RequestParam String searchedTerm) {
+        List<DecisionDto> decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
         List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
-        Map<String, Object> model = new HashMap<>();
-        model.put("results", resultsList);
-        return new ModelAndView("results", model);
-
+        return resultsList;
     }
 
-    @RequestMapping("/{ugyszam}")
-    public ModelAndView decision(@PathVariable("ugyszam") String ugyszam, @RequestParam String searchedTerm) {
-        Map<String, Object> model = new HashMap<>();
-        String decisionString = decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg.replace(searchedTerm,
-                "<mark>" + searchedTerm + "</mark>");
+    @GetMapping("/{ugyszam}")
+    public List<Decision> decision(@PathVariable("ugyszam") String ugyszam) {
         List<Decision> decisionList = new ArrayList();
-        decisionList.add(new Decision(decisionString));
-        model.put("decisions", decisionList);
-        return new ModelAndView("decisions", model);
+        decisionList.add(new Decision(decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg));
+        return decisionList;
     }
 
     public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
@@ -86,21 +49,14 @@ class HomeController {
                     if (paragraph.contains(searchedTerm)) {
                         contextString = "[...] " + " " + paragraph + " [...]";
                         contextString = contextString.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
-
                     }
-
                 }
                 resultsList.add(new DecisionSearchResult(decisionDto, contextString, searchedTerm));
-
             } catch (NoSuchElementException exception) {
                 System.out.println("NoSuchElementException");
-
             }
-
         }
         return resultsList;
-
     }
-
 
 }

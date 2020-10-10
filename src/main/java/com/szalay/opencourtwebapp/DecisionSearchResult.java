@@ -2,7 +2,7 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 
-class DecisionSearchResult {
+public class DecisionSearchResult {
 
     DecisionDto decisionDto;
     String searchContextString;
@@ -14,4 +14,15 @@ class DecisionSearchResult {
         this.searchedTerm = searchedTerm;
     }
 
+    public DecisionDto getDecisionDto() {
+        return decisionDto;
+    }
+
+    public String getSearchContextString() {
+        return searchContextString;
+    }
+
+    public String getSearchedTerm() {
+        return searchedTerm;
+    }
 }
