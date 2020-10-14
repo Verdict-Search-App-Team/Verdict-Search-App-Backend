@@ -1,0 +1,14 @@
+<!-- <p *ngFor="let context of childContextList">
+{{context}}
+</p> -->
+
+<div class="card text-white bg-secondary mb-3"
+*ngFor="let context of childContextList">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+      <h5 class="card-title">Dark card title</h5>
+      <p class="card-text">{context}</p>
+      <button (onclick)="getDecision(context);" class="btn btn-primary">Megnyitás</button>
+    </div>
+  </div>
+  <app-decision [childDecisionText]="decisionText"></app-decision>
