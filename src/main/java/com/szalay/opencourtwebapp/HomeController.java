@@ -2,6 +2,8 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -9,33 +11,37 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
+@RequestMapping("/")
 class HomeController {
+
+    HttpHeaders headers = new HttpHeaders();
 
     private final DecisionRepository decisionRepository;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
+        headers.setAccessControlAllowOrigin("http://localhost:4200");
     }
 
     @GetMapping("/home")
-    public List<Object> home() {
+    public ResponseEntity<Object> home() {
         List<Object> data = new ArrayList<>();
         data.add(decisionRepository.count());
-        return data;
+        return ResponseEntity.ok().headers(headers).body(data);
     }
 
     @GetMapping("/results")
-    public List<DecisionSearchResult> search(@RequestParam String searchedTerm) {
+    public ResponseEntity<Object> search(@RequestParam String searchedTerm) {
         List<DecisionDto> decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
         List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
-        return resultsList;
+        return ResponseEntity.ok().headers(headers).body(resultsList);
     }
 
     @GetMapping("/{ugyszam}")
-    public List<Decision> decision(@PathVariable("ugyszam") String ugyszam) {
+    public ResponseEntity<Object> decision(@PathVariable("ugyszam") String ugyszam) {
         List<Decision> decisionList = new ArrayList();
         decisionList.add(new Decision(decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg));
-        return decisionList;
+        return ResponseEntity.ok().headers(headers).body(decisionList);
     }
 
     public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
