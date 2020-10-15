@@ -28,13 +28,8 @@ export class AppComponent {
     });
 }
 
-private showResults(): void {
-  this.resultsList.forEach(element => {
-    this.contextList.push(element['searchContextString']);
-  });
 
-}
-
+/*
 search(): void {
   this.http
     .get('http://localhost:8080/results?searchedTerm=' + this.searchedTerm)
@@ -44,5 +39,5 @@ search(): void {
       this.showResults();
     });
 }
-
+*/
 }

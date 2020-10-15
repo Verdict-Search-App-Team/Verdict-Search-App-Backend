@@ -2,8 +2,6 @@ package com.szalay.opencourtwebapp;
 
 import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,34 +12,37 @@ import java.util.NoSuchElementException;
 @RequestMapping("/")
 class HomeController {
 
-    HttpHeaders headers = new HttpHeaders();
+//    HttpHeaders headers = new HttpHeaders();
 
     private final DecisionRepository decisionRepository;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        headers.setAccessControlAllowOrigin("http://localhost:4200");
+//        headers.setAccessControlAllowOrigin("*");
     }
 
+    @CrossOrigin
     @GetMapping("/home")
-    public ResponseEntity<Object> home() {
+    public List<Object> home() {
         List<Object> data = new ArrayList<>();
         data.add(decisionRepository.count());
-        return ResponseEntity.ok().headers(headers).body(data);
+        return data;
     }
 
+    @CrossOrigin
     @GetMapping("/results")
-    public ResponseEntity<Object> search(@RequestParam String searchedTerm) {
+    public List<DecisionSearchResult> search(@RequestParam String searchedTerm) {
         List<DecisionDto> decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
         List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
-        return ResponseEntity.ok().headers(headers).body(resultsList);
+        return resultsList;
     }
 
+    @CrossOrigin
     @GetMapping("/{ugyszam}")
-    public ResponseEntity<Object> decision(@PathVariable("ugyszam") String ugyszam) {
+    public List<Decision> decision(@PathVariable("ugyszam") String ugyszam) {
         List<Decision> decisionList = new ArrayList();
         decisionList.add(new Decision(decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg));
-        return ResponseEntity.ok().headers(headers).body(decisionList);
+        return decisionList;
     }
 
     public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {

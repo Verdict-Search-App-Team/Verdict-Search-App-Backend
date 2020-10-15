@@ -1,0 +1,39 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Opencourt</a>
+    <button class="navbar-toggler" type="button" aria-controls="navbarContent" [attr.aria-expanded]="!collapsed"
+        aria-label="Toggle navigation" (click)="collapsed = !collapsed">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse" [class.collapse]="collapsed" id="navbarContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" ngbDropdown>
+                <a class="nav-link">
+                    Static
+                </a>
+            </li>
+            <li class="nav-item" ngbDropdown>
+                <a class="nav-link">
+                    Static
+                </a>
+            </li>
+            <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right">
+                <a class="nav-link">
+                    Static
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary" style="top: 55px">
+    <form class="form-inline my-0 my-lg-0">
+        <div class="form-group my-0 my-lg-0" >
+            <input type="text" class="form-control mr-sm-1" placeholder="Search" [(ngModel)]="keyword"
+                name="search">
+            <button [routerLink]="['/results']" routerLinkActive="router-link-active" 
+            [queryParams]="{'searchedTerm': keyword}"
+            class="btn btn-dark my-0 my-sm-0" type="submit">Search
+        </button>
+        </div>
+    </form>
+</nav>

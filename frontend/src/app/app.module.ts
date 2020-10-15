@@ -9,14 +9,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { DecisionComponent } from './decision/decision.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { HomeContentComponent } from './home-content/home-content.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchResultsComponent,
-    DecisionComponent
+    DecisionComponent,
+    NavbarComponent,
+    FooterComponent,
+    HomeContentComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  imports: [BrowserModule, FormsModule, AppRoutingModule, HttpClientModule, NgbModule],
   providers: [],
   bootstrap: [AppComponent]
 })

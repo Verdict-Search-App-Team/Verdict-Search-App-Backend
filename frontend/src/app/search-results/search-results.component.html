@@ -1,14 +1,10 @@
-<!-- <p *ngFor="let context of childContextList">
-{{context}}
-</p> -->
-
-<div class="card text-white bg-secondary mb-3"
-*ngFor="let context of childContextList">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-      <h5 class="card-title">Dark card title</h5>
-      <p class="card-text">{context}</p>
-      <button (onclick)="getDecision(context);" class="btn btn-primary">Megnyitás</button>
-    </div>
+<div class="card text-white bg-info mb-3" *ngFor="let result of resultsList; let i = index;">
+  <div class="card-header">{{result.decisionDto.birosag}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{result.decisionDto.ugyszam}}</h5>
+    <p class="card-text">{{result.searchContextString}}</p>
+    <button 
+    [routerLink]="['/', result.decisionDto.ugyszam]"
+    class="btn btn-primary">Megnyitás</button>
   </div>
-  <app-decision [childDecisionText]="decisionText"></app-decision>
+</div>
