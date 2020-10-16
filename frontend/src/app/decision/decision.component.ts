@@ -11,7 +11,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class DecisionComponent implements OnInit {
 
   decision: { id: string }
-  decisionString: string;
+  decisionString: string[];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
 
@@ -22,7 +22,7 @@ export class DecisionComponent implements OnInit {
     this.http.
       get('http://localhost:8080/' + this.decision.id)
       .subscribe(response => {
-        this.decisionString = response[0]['decisionString'];
+        this.decisionString = response[0]['decisionString'].split("\n");
       });
   }
 

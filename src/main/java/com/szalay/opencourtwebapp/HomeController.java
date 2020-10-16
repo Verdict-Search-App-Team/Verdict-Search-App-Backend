@@ -18,7 +18,6 @@ class HomeController {
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-//        headers.setAccessControlAllowOrigin("*");
     }
 
     @CrossOrigin
@@ -32,7 +31,7 @@ class HomeController {
     @CrossOrigin
     @GetMapping("/results")
     public List<DecisionSearchResult> search(@RequestParam String searchedTerm) {
-        List<DecisionDto> decisionDtoList = decisionRepository.findByHatarozatszovegContaining(searchedTerm);
+        List<DecisionDto> decisionDtoList = decisionRepository.findByDecisionTextContaining(searchedTerm);
         List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
         return resultsList;
     }
@@ -41,7 +40,7 @@ class HomeController {
     @GetMapping("/{ugyszam}")
     public List<Decision> decision(@PathVariable("ugyszam") String ugyszam) {
         List<Decision> decisionList = new ArrayList();
-        decisionList.add(new Decision(decisionRepository.findByUgyszam(ugyszam).get(0).hatarozatszoveg));
+        decisionList.add(new Decision(decisionRepository.findByCaseNumber(ugyszam).get(0).decisionText));
         return decisionList;
     }
 
@@ -51,7 +50,7 @@ class HomeController {
         for (DecisionDto decisionDto : decisionDtoList) {
             String[] tempParagraphArray;
             try {
-                tempParagraphArray = decisionDto.hatarozatszoveg.split("<br>");
+                tempParagraphArray = decisionDto.decisionText.split("<br>");
                 for (String paragraph : tempParagraphArray) {
                     if (paragraph.contains(searchedTerm)) {
                         contextString = "[...] " + " " + paragraph + " [...]";

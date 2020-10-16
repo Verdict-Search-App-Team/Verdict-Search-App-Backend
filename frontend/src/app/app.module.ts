@@ -13,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeContentComponent } from './home-content/home-content.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HomeContentComponent } from './home-content/home-content.component';
     DecisionComponent,
     NavbarComponent,
     FooterComponent,
-    HomeContentComponent
+    HomeContentComponent,
+    PageNotFoundComponent
   ],
   imports: [BrowserModule, FormsModule, AppRoutingModule, HttpClientModule, NgbModule],
   providers: [],
