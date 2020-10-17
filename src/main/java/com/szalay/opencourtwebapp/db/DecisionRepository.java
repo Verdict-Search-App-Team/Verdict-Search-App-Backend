@@ -9,6 +9,7 @@ import java.util.List;
 public interface DecisionRepository extends CrudRepository<DecisionDto, String> {
 
     List<DecisionDto> findByCaseNumber(String query);
+    List<DecisionDto> findByCaseNumberContaining(String query);
     List<DecisionDto> findByDecisionTextContaining(String query);
 
 

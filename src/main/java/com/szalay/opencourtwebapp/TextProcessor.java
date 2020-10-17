@@ -6,22 +6,32 @@ import org.springframework.boot.json.JsonParser;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.rtf.RTFEditorKit;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TextProcessor {
 
     //GENERAL HELPER METHODS
 
-    public static String readString(String filepath) throws IOException {
-        return Files.readString(Path.of(filepath));
+    public static String readString(String filepath) {
+        try {
+            return Files.readString(Path.of(filepath));
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static String getTextFromRtf(String filePath) throws FileNotFoundException {
+    public static String readRtf(String filePath) {
         String result = null;
         File file = new File(filePath);
         try {
@@ -36,26 +46,14 @@ public class TextProcessor {
     }
 
     public static Map<String, Object> parseJSONToMap(String filePath) {
-        try {
-            JsonParser myParser = new BasicJsonParser();
-            return myParser.parseMap(readString(filePath));
-        } catch (IOException e) {
-            System.err.println("Error parsing file located at: " + filePath);
-            e.printStackTrace();
-        }
-        return null;
+        JsonParser myParser = new BasicJsonParser();
+        return myParser.parseMap(readString(filePath));
     }
 
 
     //SPECIALISED TEXT PROCESSING METHODS FOR COURT DECISIONS
 
-    public static String prepareDecisionText(File file) {
-        String rawDecisionText = null;
-        try {
-            rawDecisionText = TextProcessor.getTextFromRtf(file.getAbsolutePath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public static String prepareDecisionText(String rawText) {
         Map<String, String> replacementMap = new HashMap<>(Map.of(
                 "õ", "ő",
                 "Õ", "Ő",
@@ -64,8 +62,8 @@ public class TextProcessor {
                 "û", "ű",
                 "û".toUpperCase(), "Ű"
         ));
-        String preparedText = rawDecisionText.replaceAll("[\n]{1,10}", "\n");
-        System.out.println(preparedText);
+        String preparedText = rawText.replaceAll("[\n]{1,10}", "\n");
+//        System.out.println(preparedText);
         for (String target :
                 replacementMap.keySet()) {
             if (preparedText.contains(target)) {
@@ -85,10 +83,10 @@ public class TextProcessor {
     }
 
     public static String extractCourtName(String decisionText) {
-        Map<String, Object> courtNamesMap = parseJSONToMap(DataFiles.JSON_LIST_OF_COURTS.getFilePath());
+        Map<String, Object> courtNamesMap = parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
         for (String line : decisionText.split("\n")) {
             for (String courtCode : courtNamesMap.keySet()) {
-                String[] courtNamesArray = (String[]) courtNamesMap.get(courtCode);
+                List<String> courtNamesArray = (ArrayList<String>)courtNamesMap.get(courtCode);
                 for (String courtName : courtNamesArray) {
                     if (!courtName.equals("") && line.toLowerCase().contains(courtName.toLowerCase())) {
                         return courtName;
@@ -100,7 +98,7 @@ public class TextProcessor {
     }
 
     public static String extractCaseType(String fileName) {
-        Map<String, Object> caseGroupsMap = parseJSONToMap(DataFiles.JSON_CASE_GROUPS.getFilePath());
+        Map<String, Object> caseGroupsMap = parseJSONToMap(InitialDataFilePaths.JSON_CASE_GROUPS.getFilePath());
         for (String caseCode : caseGroupsMap.keySet()) {
             if (!caseCode.equals("") && fileName.toLowerCase().contains(caseCode.toLowerCase())) {
                 return (String) caseGroupsMap.get(caseCode);

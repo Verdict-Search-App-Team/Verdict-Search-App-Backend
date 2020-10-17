@@ -4,9 +4,12 @@ import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static com.szalay.opencourtwebapp.InitialDataFilePaths.DECISIONS_FILESYSTEM_LOCATION;
 
 @RestController
 @RequestMapping("/")
@@ -14,18 +17,17 @@ class HomeController {
 
 //    HttpHeaders headers = new HttpHeaders();
 
-    private final DecisionRepository decisionRepository;
+    public final DecisionRepository decisionRepository;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
+        saveAllFromFilesystemToDB();
     }
 
     @CrossOrigin
     @GetMapping("/home")
-    public List<Object> home() {
-        List<Object> data = new ArrayList<>();
-        data.add(decisionRepository.count());
-        return data;
+    public Object home() {
+        return decisionRepository.count();
     }
 
     @CrossOrigin
@@ -38,10 +40,8 @@ class HomeController {
 
     @CrossOrigin
     @GetMapping("/{ugyszam}")
-    public List<Decision> decision(@PathVariable("ugyszam") String ugyszam) {
-        List<Decision> decisionList = new ArrayList();
-        decisionList.add(new Decision(decisionRepository.findByCaseNumber(ugyszam).get(0).decisionText));
-        return decisionList;
+    public DecisionDto decision(@PathVariable("ugyszam") String ugyszam) {
+        return decisionRepository.findByCaseNumber(ugyszam).get(0);
     }
 
     public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
@@ -63,6 +63,16 @@ class HomeController {
             }
         }
         return resultsList;
+    }
+
+    public void saveAllFromFilesystemToDB () {
+        List<File> fileList = ImportUtils.getListOfFilesContainingDecisions(DECISIONS_FILESYSTEM_LOCATION.getFilePath());
+        for (File file : fileList) {
+            // Only construct new DecisionDto object if the record doesn't already exist in the database
+            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() != 0){
+                decisionRepository.save(new DecisionDto(file));
+            }
+        }
     }
 
 }

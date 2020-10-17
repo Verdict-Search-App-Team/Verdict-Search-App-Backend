@@ -4,43 +4,44 @@ import com.szalay.opencourtwebapp.TextProcessor;
 
 import javax.persistence.*;
 import java.io.File;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "hu_dontesek")
-public class DecisionDto implements Serializable {
+public class DecisionDto /*implements Serializable*/ {
 
     @Id
-    @GeneratedValue
-    @Column(name = "caseNumber")
+    //@GeneratedValue
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
     public String caseNumber;
 
-    @Column(name = "courtName")
+    @Column
     public String courtName;
 
-    @Column(name = "caseType")
+    @Column
     public String caseType;
 
-    @Column(name = "decisionText")
+    @Lob
+    @Column(length = 65000)
     public String decisionText;
 
-    @Column(name = "decisionDate")
+    @Column
     public LocalDate decisionDate;
 
-    @Column(name = "procedureYear")
+    @Column
     public String procedureYear;
 
-    @Column(name = "subjectMatter")
+    @Column
     public String subjectMatter;
 
-    @Column(name = "grammaticalKeywords")
+    @Column
     public String grammaticalKeywords;
 
-    @Column(name = "frequentSearchKeywords")
+    @Column
     public String frequentSearchKeywords;
 
-    @Column(name = "viewCount")
+    @Column
     public long viewCount;
 
 
@@ -48,15 +49,16 @@ public class DecisionDto implements Serializable {
     }
 
     public DecisionDto(File file) {
-        String fileName = file.getName();
-        String processedDecisionText = TextProcessor.prepareDecisionText(file);
-        this.caseNumber = TextProcessor.extractCaseNumber(fileName);
+        String rawtext = TextProcessor.readRtf(file.getAbsolutePath());
+        this.decisionText = TextProcessor.prepareDecisionText(rawtext);
+        System.out.println("The length of decisiontext is: " + this.decisionText.length());
+        System.out.println(this.decisionText);
+        this.caseNumber = TextProcessor.extractCaseNumber(file.getName());
         this.courtName = TextProcessor.extractCourtName(this.decisionText);
-        this.caseType = TextProcessor.extractCaseType(fileName);
-        this.decisionText = processedDecisionText;
-        this.procedureYear = TextProcessor.extractProcedureYear(fileName);
+        this.caseType = TextProcessor.extractCaseType(file.getName());
+        this.procedureYear = TextProcessor.extractProcedureYear(file.getName());
         this.subjectMatter = TextProcessor.extractSubjectMatter(this.decisionText);
-        int[] dateArray = TextProcessor.extractDecisionDate((this.decisionText));
+        int[] dateArray = TextProcessor.extractDecisionDate(this.decisionText);
         this.decisionDate = LocalDate.of(dateArray[0], dateArray[1], dateArray[2]);
         this.grammaticalKeywords = TextProcessor.extractGrammaticalKeywords(this.decisionText);
         this.frequentSearchKeywords = null;
