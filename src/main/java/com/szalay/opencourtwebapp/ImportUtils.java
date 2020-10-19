@@ -1,38 +1,48 @@
 package com.szalay.opencourtwebapp;
 
-import com.szalay.opencourtwebapp.db.DecisionDto;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.szalay.opencourtwebapp.InitialDataFilePaths.DECISIONS_FILESYSTEM_LOCATION;
 
 public class ImportUtils {
 
 //    @Autowired
 //    static DecisionRepository decisionRepository;
 
+    private static List<File> decisionFiles = new ArrayList<>();
+    private static List<File> directoriesToBeChecked = new ArrayList<>();
 
 
     public static List<File> getListOfFilesContainingDecisions(String mainFolderPath) {
-        List<File> initialFileList = new ArrayList<>();
-        File[] fileNames = new File(mainFolderPath).listFiles();
-        if (fileNames != null) {
-            for (File file : fileNames) {
-                if (file.isDirectory()) {
-                    File[] fileNames2 = new File(file.getAbsolutePath()).listFiles();
-                    assert fileNames2 != null;
-                    for (File file2 : fileNames2) {
-                        if (!file2.getName().contains(".txt")) {
-                            initialFileList.add(file2);
-                        }
-                    }
+        try {
+            File[] files = new File(mainFolderPath).listFiles();
+            System.out.println(new File(mainFolderPath).listFiles().toString());
+            for (File file :
+                    files) {
+                directoriesToBeChecked.add(file);
+            }
+            while (!directoriesToBeChecked.isEmpty()) {
+                recursiveSearch();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return decisionFiles;
+    }
+
+    public static void recursiveSearch() {
+        for (int i = 0; i < directoriesToBeChecked.size(); i++) {
+            File file = directoriesToBeChecked.get(i);
+            if (file.isDirectory() && !directoriesToBeChecked.contains(file)) {
+                directoriesToBeChecked.add(file);
+            } else {
+                directoriesToBeChecked.remove(file);
+                if (file.getName().contains(".rtf")) {
+                    decisionFiles.add(file);
                 }
             }
         }
-        return initialFileList;
-
     }
 
 

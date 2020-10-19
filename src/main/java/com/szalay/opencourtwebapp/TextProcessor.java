@@ -1,55 +1,11 @@
 package com.szalay.opencourtwebapp;
 
-import org.springframework.boot.json.BasicJsonParser;
-import org.springframework.boot.json.JsonParser;
-
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.rtf.RTFEditorKit;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TextProcessor {
-
-    //GENERAL HELPER METHODS
-
-    public static String readString(String filepath) {
-        try {
-            return Files.readString(Path.of(filepath));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static String readRtf(String filePath) {
-        String result = null;
-        File file = new File(filePath);
-        try {
-            DefaultStyledDocument styledDoc = new DefaultStyledDocument();
-            InputStream is = new FileInputStream(file);
-            new RTFEditorKit().read(is, styledDoc, 0);
-            result = new String(styledDoc.getText(0, styledDoc.getLength()).getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-        } catch (BadLocationException e) {
-        }
-        return result;
-    }
-
-    public static Map<String, Object> parseJSONToMap(String filePath) {
-        JsonParser myParser = new BasicJsonParser();
-        return myParser.parseMap(readString(filePath));
-    }
-
 
     //SPECIALISED TEXT PROCESSING METHODS FOR COURT DECISIONS
 
@@ -83,7 +39,7 @@ public class TextProcessor {
     }
 
     public static String extractCourtName(String decisionText) {
-        Map<String, Object> courtNamesMap = parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
+        Map<String, Object> courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
         for (String line : decisionText.split("\n")) {
             for (String courtCode : courtNamesMap.keySet()) {
                 List<String> courtNamesArray = (ArrayList<String>)courtNamesMap.get(courtCode);
@@ -98,7 +54,7 @@ public class TextProcessor {
     }
 
     public static String extractCaseType(String fileName) {
-        Map<String, Object> caseGroupsMap = parseJSONToMap(InitialDataFilePaths.JSON_CASE_GROUPS.getFilePath());
+        Map<String, Object> caseGroupsMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_CASE_GROUPS.getFilePath());
         for (String caseCode : caseGroupsMap.keySet()) {
             if (!caseCode.equals("") && fileName.toLowerCase().contains(caseCode.toLowerCase())) {
                 return (String) caseGroupsMap.get(caseCode);

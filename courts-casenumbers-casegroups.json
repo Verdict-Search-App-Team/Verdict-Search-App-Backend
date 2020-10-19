@@ -1,0 +1,150 @@
+[
+  {
+    "courts": [
+      "Kúria"
+    ],
+    "case-numbers-start": 1,
+    "case-numbers-end": 2500,
+    "caseGroups": [
+      "Bfv"
+    ]
+  },
+  {
+    "courts": [
+      "Kúria"
+    ],
+    "case-numbers-start": 10001,
+    "case-numbers-end": 11600,
+    "caseGroups": [
+      "Mfv"
+    ]
+  },
+  {
+    "courts": [
+      "Kúria"
+    ],
+    "case-numbers-start": 20001,
+    "case-numbers-end": 23000,
+    "caseGroups": [
+      "Pfv"
+    ]
+  },
+  {
+    "courts": [
+      "Kúria"
+    ],
+    "case-numbers-start": 30001,
+    "case-numbers-end": 31000,
+    "caseGroups": [
+      "Gfv"
+    ]
+  },
+  {
+    "courts": [
+      "Kúria"
+    ],
+    "case-numbers-start": 1,
+    "case-numbers-end": 2500,
+    "caseGroups": [
+      "Bfv"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 1,
+    "case-numbers-end": 3000,
+    "caseGroups": [
+      "Bf",
+      "Bhar",
+      "Fkf",
+      "Kb",
+      "Kbf",
+      "Fkhar",
+      "B",
+      "Bk",
+      "Fk"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 20001,
+    "case-numbers-end": 30000,
+    "caseGroups": [
+      "P",
+      "G",
+      "Gf",
+      "K",
+      "Pk",
+      "Kf",
+      "Mf",
+      "Pf",
+      "Pkf"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 30001,
+    "case-numbers-end": 31500,
+    "caseGroups": [
+      "Gf",
+      "K"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 31501,
+    "case-numbers-end": 37000,
+    "caseGroups": [
+      "Kf",
+      "K"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 40001,
+    "case-numbers-end": 46000,
+    "caseGroups": [
+      "G",
+      "Gf"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 50001,
+    "case-numbers-end": 50100,
+    "caseGroups": [
+      "Mf"
+    ]
+  },
+  {
+    "courts": [
+      "Ítélőtábla",
+      "Törvényszék"
+    ],
+    "case-numbers-start": 75001,
+    "case-numbers-end": 78000,
+    "caseGroups": [
+      "G",
+      "Gf"
+    ]
+  }
+]
+

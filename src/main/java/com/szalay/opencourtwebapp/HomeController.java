@@ -69,7 +69,7 @@ class HomeController {
         List<File> fileList = ImportUtils.getListOfFilesContainingDecisions(DECISIONS_FILESYSTEM_LOCATION.getFilePath());
         for (File file : fileList) {
             // Only construct new DecisionDto object if the record doesn't already exist in the database
-            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() != 0){
+            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() == 0){
                 decisionRepository.save(new DecisionDto(file));
             }
         }

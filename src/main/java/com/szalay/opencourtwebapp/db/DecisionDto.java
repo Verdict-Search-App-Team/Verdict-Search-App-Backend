@@ -1,5 +1,6 @@
 package com.szalay.opencourtwebapp.db;
 
+import com.szalay.opencourtwebapp.IOUtils;
 import com.szalay.opencourtwebapp.TextProcessor;
 
 import javax.persistence.*;
@@ -49,7 +50,7 @@ public class DecisionDto /*implements Serializable*/ {
     }
 
     public DecisionDto(File file) {
-        String rawtext = TextProcessor.readRtf(file.getAbsolutePath());
+        String rawtext = IOUtils.readRtf(file.getAbsolutePath());
         this.decisionText = TextProcessor.prepareDecisionText(rawtext);
         System.out.println("The length of decisiontext is: " + this.decisionText.length());
         System.out.println(this.decisionText);
