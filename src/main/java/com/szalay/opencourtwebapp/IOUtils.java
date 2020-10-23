@@ -38,8 +38,9 @@ public class IOUtils {
             InputStream is = new FileInputStream(file);
             new RTFEditorKit().read(is, styledDoc, 0);
             result = new String(styledDoc.getText(0, styledDoc.getLength()).getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-        } catch (BadLocationException e) {
+        } catch (IOException | BadLocationException | ArrayIndexOutOfBoundsException e ) {
+            e.printStackTrace();
+            return null;
         }
         return result;
     }

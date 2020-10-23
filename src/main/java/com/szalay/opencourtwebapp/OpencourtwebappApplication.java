@@ -9,8 +9,12 @@ public class OpencourtwebappApplication {
 
 
     public static void main(String[] args) {
+
         SpringApplication.run(OpencourtwebappApplication.class, args);
+
         ScraperHU.start();
+
+
     }
 
 }

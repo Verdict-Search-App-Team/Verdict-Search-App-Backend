@@ -33,7 +33,8 @@ public class DecisionDto /*implements Serializable*/ {
     @Column
     public String procedureYear;
 
-    @Column
+    @Lob
+    @Column(length = 65000)
     public String subjectMatter;
 
     @Column
@@ -51,19 +52,23 @@ public class DecisionDto /*implements Serializable*/ {
 
     public DecisionDto(File file) {
         String rawtext = IOUtils.readRtf(file.getAbsolutePath());
-        this.decisionText = TextProcessor.prepareDecisionText(rawtext);
-        System.out.println("The length of decisiontext is: " + this.decisionText.length());
-        System.out.println(this.decisionText);
         this.caseNumber = TextProcessor.extractCaseNumber(file.getName());
-        this.courtName = TextProcessor.extractCourtName(this.decisionText);
-        this.caseType = TextProcessor.extractCaseType(file.getName());
-        this.procedureYear = TextProcessor.extractProcedureYear(file.getName());
-        this.subjectMatter = TextProcessor.extractSubjectMatter(this.decisionText);
-        int[] dateArray = TextProcessor.extractDecisionDate(this.decisionText);
-        this.decisionDate = LocalDate.of(dateArray[0], dateArray[1], dateArray[2]);
-        this.grammaticalKeywords = TextProcessor.extractGrammaticalKeywords(this.decisionText);
-        this.frequentSearchKeywords = null;
-        this.viewCount = 0;
+        if (rawtext != null){
+            this.decisionText = TextProcessor.prepareDecisionText(rawtext);
+            System.out.println("The length of decisiontext is: " + this.decisionText.length());
+            System.out.println(this.decisionText);
+
+            this.courtName = TextProcessor.extractCourtName(this.decisionText);
+            this.caseType = TextProcessor.extractCaseType(file.getName());
+            this.procedureYear = TextProcessor.extractProcedureYear(file.getName());
+            this.subjectMatter = TextProcessor.extractSubjectMatter(this.decisionText);
+            int[] dateArray = TextProcessor.extractDecisionDate(this.decisionText);
+            this.decisionDate = LocalDate.of(dateArray[0], dateArray[1], dateArray[2]);
+            this.grammaticalKeywords = TextProcessor.extractGrammaticalKeywords(this.decisionText);
+            this.frequentSearchKeywords = null;
+            this.viewCount = 0;
+        }
+
     }
 
     public DecisionDto(String caseNumber, String courtName, String caseType, String decisionText, LocalDate decisionDate, String procedureYear, String subjectMatter, String grammaticalKeywords, String frequentSearchKeywords, long viewCount) {

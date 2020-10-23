@@ -4,12 +4,9 @@ import com.szalay.opencourtwebapp.db.DecisionDto;
 import com.szalay.opencourtwebapp.db.DecisionRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import static com.szalay.opencourtwebapp.InitialDataFilePaths.DECISIONS_FILESYSTEM_LOCATION;
 
 @RestController
 @RequestMapping("/")
@@ -21,7 +18,7 @@ class HomeController {
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        saveAllFromFilesystemToDB();
+        ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
     }
 
     @CrossOrigin
@@ -50,7 +47,7 @@ class HomeController {
         for (DecisionDto decisionDto : decisionDtoList) {
             String[] tempParagraphArray;
             try {
-                tempParagraphArray = decisionDto.decisionText.split("<br>");
+                tempParagraphArray = decisionDto.decisionText.split("\n");
                 for (String paragraph : tempParagraphArray) {
                     if (paragraph.contains(searchedTerm)) {
                         contextString = "[...] " + " " + paragraph + " [...]";
@@ -65,14 +62,6 @@ class HomeController {
         return resultsList;
     }
 
-    public void saveAllFromFilesystemToDB () {
-        List<File> fileList = ImportUtils.getListOfFilesContainingDecisions(DECISIONS_FILESYSTEM_LOCATION.getFilePath());
-        for (File file : fileList) {
-            // Only construct new DecisionDto object if the record doesn't already exist in the database
-            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() == 0){
-                decisionRepository.save(new DecisionDto(file));
-            }
-        }
-    }
+
 
 }

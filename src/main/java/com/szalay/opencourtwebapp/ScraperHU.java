@@ -18,11 +18,12 @@ public final class ScraperHU {
 
     private static final JSONArray successfulDownloadsInfo = new JSONArray();
     private static final JSONArray failedDownloadsInfo = new JSONArray();
-    private static final JSONArray emptyDownloadsInfo = new JSONArray();
 
     private static List<DownloadResult> previousSuccessfulDownloadsInfo;
     private static List<DownloadResult> previousFailedDownloadsInfo;
-    private static List<DownloadResult> previousEmptyDownloadsInfo;
+
+    private static int successfulDownloads = 0;
+    private static int failedDownloads = 0;
 
     private static final String mainFolderPath = "/media/greg/FD_BETA9SR2/opencourt";
 
@@ -53,12 +54,9 @@ public final class ScraperHU {
         } catch (Exception e) {
             System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
         }
-        try {
-            previousEmptyDownloadsInfo = DownloadResult.parseFromList(DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "empty-downloads-info.json");
-
-        } catch (Exception e) {
-            System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "empty-downloads-info.json");
-        }
+        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json", true);
+        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json", true);
+        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/empty-downloads-info.json", true);
     }
 
     /*
@@ -115,17 +113,14 @@ public final class ScraperHU {
                 + fileNo + "//";
         String nameOfNewFile = caseGroup.toLowerCase() + "-" + caseNumber + "-" + year + "-" + fileNo;
         String pathOfNewFile = downloadFolderPath
-                + "/" + courtName.toLowerCase()
-                + "/" + caseGroup.toLowerCase()
-                + nameOfNewFile;
+                + "/" + courtName.toLowerCase().split(" ")[0]
+                + "-"
+                + courtName.toLowerCase().split(" ")[1]
+                + "/" + nameOfNewFile;
         System.out.println("DownloadURL is: " + downloadUrl);
         System.out.println("Path of new file is: " + pathOfNewFile);
-        if (previousSuccessfulDownloadsInfo != null
-                && previousFailedDownloadsInfo != null
-                && previousEmptyDownloadsInfo != null
-                && !containsDownloadResult(previousSuccessfulDownloadsInfo, downloadUrl)
-                && !containsDownloadResult(previousFailedDownloadsInfo, downloadUrl)
-                && !containsDownloadResult(previousEmptyDownloadsInfo, downloadUrl)) {
+        if ((previousSuccessfulDownloadsInfo != null && !containsDownloadResult(previousSuccessfulDownloadsInfo, downloadUrl))
+        || (previousFailedDownloadsInfo != null && !containsDownloadResult(previousFailedDownloadsInfo, downloadUrl))){
             return;
         }
         try {
@@ -133,19 +128,18 @@ public final class ScraperHU {
             IOUtils.download(downloadUrl, pathOfNewFile);
             System.out.println("Download succesful!");
             successfulDownloadsInfo.add(new DownloadResult(downloadUrl));
+            IOUtils.writeString(successfulDownloadsInfo.toJSONString(),
+                    DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json",
+                    false);
         } catch (MuteURLException mutUEx) {
-            emptyDownloadsInfo.add(new DownloadResult(downloadUrl));
             mutUEx.printStackTrace();
         } catch (IOException iOEx) {
             failedDownloadsInfo.add(new DownloadResult(downloadUrl));
+            IOUtils.writeString(failedDownloadsInfo.toJSONString(),
+                    DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json",
+                    true);
+            failedDownloads++;
             iOEx.printStackTrace();
-            if (successfulDownloadsInfo.size() >= 10
-                    || failedDownloadsInfo.size() >= 10
-                    || emptyDownloadsInfo.size() >= 10) {
-                IOUtils.writeString(successfulDownloadsInfo.toJSONString(), "successful-downloads-info.json", true);
-                IOUtils.writeString(failedDownloadsInfo.toJSONString(), "failed-downloads-info.json", true);
-                IOUtils.writeString(emptyDownloadsInfo.toJSONString(), "empty-downloads-info.json", true);
-            }
         }
     }
 

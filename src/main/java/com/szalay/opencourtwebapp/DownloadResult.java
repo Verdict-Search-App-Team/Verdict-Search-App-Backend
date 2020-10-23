@@ -8,8 +8,8 @@ import java.util.List;
 
 public class DownloadResult {
 
-    private final String urlString;
-    private final String dateTime;
+    final String urlString;
+    final String dateTime;
 
     public DownloadResult(String urlString) {
         this.urlString = urlString;

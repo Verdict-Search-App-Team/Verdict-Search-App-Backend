@@ -121,7 +121,8 @@ public class TextProcessor {
             } else if (decisonText.contains("szemben ") && decisonText.indexOf("szemben ") < lowestIndex) {
                 return decisonText.substring(decisonText.indexOf("szemben "), lowestIndex);
             }
-        } else if (lowestIndex == indexes[1] || lowestIndex == indexes[2]) {
+        } else if ((lowestIndex == indexes[1] || lowestIndex == indexes[2])
+            && (lowestIndex >= 0) ) {
             //uj valtozo legyen
             String hatarozatszovegSub = decisonText.substring(0, lowestIndex);
             hatarozatszovegSub = hatarozatszovegSub.substring(hatarozatszovegSub.lastIndexOf('A'), lowestIndex);
