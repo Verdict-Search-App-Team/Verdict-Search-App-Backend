@@ -1,7 +1,9 @@
 
+
+
 <h2>Találatok:</h2>
 <div class="card text-white bg-dark mb-3" *ngFor="let result of resultsList; let i = index;">
-  <div class="card-header row align-items-center" >
+  <div class="card-header row align-items-center">
     <div class="col-lg-2 m-2">
       {{result.decisionDto.caseNumber}}
     </div>
@@ -14,17 +16,14 @@
     <div class="col-lg-2 m-2">
       {{result.decisionDto.subjectMatter}}
     </div>
-      <a class="btn btn-warning m-2" href="{{result.decisionDto.source}}">Letöltés</a>
-   
-      
-    <button [routerLink]="['/',result.decisionDto.caseNumber]"
-    [queryParams]="{'searchedTerm': mySearch.searchedTerm}"
-    class="btn btn-primary" style="height: 50px;">Megnyitás</button>
+    <a class="btn btn-warning m-2" href="{{result.decisionDto.source}}">Letöltés</a>
+    <button [routerLink]="['/',result.decisionDto.caseNumber, mySearch.searchedTerm]" class="btn btn-primary"
+      style="height: 50px;">Megnyitás</button>
   </div>
   <div class="card-body">
     <h5 class="card-title">
     </h5>
-    <p class="card-text" innerHTML="{{ result.searchContextString | highlight : mySearch.searchedTerm}}">  
+    <p class="card-text" innerHTML="{{ result.searchContextString | highlight : mySearch.searchedTerm}}">
     </p>
   </div>
 </div>

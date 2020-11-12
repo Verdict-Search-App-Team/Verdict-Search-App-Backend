@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LocationStrategy } from '@angular/common';
 
 
 @Component({
@@ -14,7 +15,10 @@ export class AppComponent {
   resultsList;
   contextList = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private location: LocationStrategy) { }
+
+  fullPath = (<any>this.location)._platformLocation.location.href;
+
 
   ngOnInit() {
     this.fetchNumberOfRulings();

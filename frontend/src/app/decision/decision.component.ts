@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
+
 @Component({
   selector: 'app-decision',
   templateUrl: './decision.component.html',
@@ -11,17 +12,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class DecisionComponent implements OnInit {
 
   decision: { id: any; };
-  decisionObject: Object;
+  decisionObject: any;
   decisionString: string[];
-  mySearch;
+  mySearch: any = "";
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
+
 
   ngOnInit(): void {
     this.decision = {
       id: this.route.snapshot.params['id']
     };
-    this.mySearch = this.route.snapshot.queryParams;
+    this.mySearch = this.route.snapshot.params['searchedTerm'];
     console.log('GET: http://localhost:8080/' + this.decision.id);
     this.http.
       get('http://localhost:8080/' + this.decision.id)

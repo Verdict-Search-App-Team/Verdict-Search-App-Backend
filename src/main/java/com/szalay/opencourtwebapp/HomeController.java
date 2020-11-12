@@ -68,14 +68,17 @@ class HomeController {
     @GetMapping("/{ugyszam}")
     public DecisionDto decision(@PathVariable("ugyszam") String ugyszam) {
         // Find decision
-        DecisionDto myDecision = decisionRepository.findByCaseNumber(ugyszam).get(0);
+        DecisionDto myDecision = new DecisionDto();
+        if  (decisionRepository.findByCaseNumber(ugyszam).get(0) != null){
+            myDecision = decisionRepository.findByCaseNumber(ugyszam).get(0);
+        }
+
         // Add current searched term to frequently searched terms
         decisionRepository.setFrequentSearchKeywordsFor(this.searchedTermGlobal
                 + myDecision.frequentSearchKeywords + "_", myDecision.caseNumber);
         // Add +1 to decision view count
         decisionRepository.setViewCountsFor(myDecision.viewCount + 1, myDecision.caseNumber);
         return myDecision;
-
     }
 
     private String getSearchContext(DecisionDto decisionDto, String searchedTerm) {

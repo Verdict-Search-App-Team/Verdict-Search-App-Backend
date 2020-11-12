@@ -18,7 +18,7 @@ export class SearchResultsComponent implements OnInit {
   decisionToBeShown = -1;
   isDecisionShown = false;
 
-  mySearch;
+  mySearch: any = "";
 
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
