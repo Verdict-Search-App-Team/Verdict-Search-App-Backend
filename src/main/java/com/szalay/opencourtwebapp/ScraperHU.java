@@ -36,6 +36,7 @@ public final class ScraperHU {
     private static Map<String, Object> courtNamesMap;
 
     static {
+
         try {
             downloadInfos = DownloadInfo.parseFromList(JSON_COURTS_CASENUMBERS_CASEGROUPS.getFilePath());
             courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
@@ -54,9 +55,9 @@ public final class ScraperHU {
         } catch (Exception e) {
             System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
         }
-        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json", true);
-        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json", true);
-        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/empty-downloads-info.json", true);
+//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json", true);
+//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json", true);
+//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/empty-downloads-info.json", true);
     }
 
     /*
@@ -65,6 +66,10 @@ public final class ScraperHU {
      */
 
     public static void start() {
+        // https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
+//        download(DECISIONS_FILESYSTEM_LOCATION.getFilePath(), "0001", "Kúria", "Gfv",
+//                30155, 2009, 5);
+
 
         // Every download info unit
         for (Map<String, Object> downloadInfo : downloadInfos) {
@@ -100,6 +105,10 @@ public final class ScraperHU {
                 }
             }
         }
+
+
+
+
     }
 
 
@@ -112,11 +121,19 @@ public final class ScraperHU {
                 + year + "_"
                 + fileNo + "//";
         String nameOfNewFile = caseGroup.toLowerCase() + "-" + caseNumber + "-" + year + "-" + fileNo;
-        String pathOfNewFile = downloadFolderPath
-                + "/" + courtName.toLowerCase().split(" ")[0]
-                + "-"
-                + courtName.toLowerCase().split(" ")[1]
-                + "/" + nameOfNewFile;
+        String pathOfNewFile;
+        if (courtName.toLowerCase().split(" ").length >= 2){
+            pathOfNewFile = downloadFolderPath
+                    + "/" + courtName.toLowerCase().split(" ")[0]
+                    + "-"
+                    + courtName.toLowerCase().split(" ")[1]
+                    + "/" + nameOfNewFile;
+        } else {
+            pathOfNewFile = downloadFolderPath
+                    + "/" + courtName.toLowerCase().split(" ")[0]
+                    + "/" + nameOfNewFile;
+        }
+
         System.out.println("DownloadURL is: " + downloadUrl);
         System.out.println("Path of new file is: " + pathOfNewFile);
         if ((previousSuccessfulDownloadsInfo != null && !containsDownloadResult(previousSuccessfulDownloadsInfo, downloadUrl))
@@ -126,7 +143,7 @@ public final class ScraperHU {
         try {
             // Only download if it is not yet downloaded
             IOUtils.download(downloadUrl, pathOfNewFile);
-            System.out.println("Download succesful!");
+            System.out.println("********************************Download successful!**********************************************");
             successfulDownloadsInfo.add(new DownloadResult(downloadUrl));
             IOUtils.writeString(successfulDownloadsInfo.toJSONString(),
                     DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json",
@@ -137,7 +154,7 @@ public final class ScraperHU {
             failedDownloadsInfo.add(new DownloadResult(downloadUrl));
             IOUtils.writeString(failedDownloadsInfo.toJSONString(),
                     DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json",
-                    true);
+                    false);
             failedDownloads++;
             iOEx.printStackTrace();
         }

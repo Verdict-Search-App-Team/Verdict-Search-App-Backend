@@ -61,8 +61,10 @@ public class IOUtils {
         if (connection.getResponseCode() >= 500) {
             throw new MuteURLException("HTTP request returned with response code: " + connection.getResponseCode());
         }
-        FileInputStream myInputStream = (FileInputStream) connection.getInputStream();
-        FileOutputStream myOutputStream = new FileOutputStream(file);
+        InputStream myInputStream = connection.getInputStream();
+        File myNewDecision = new File(file);
+        myNewDecision.getParentFile().mkdirs();
+        FileOutputStream myOutputStream = new FileOutputStream(myNewDecision);
         myInputStream.transferTo(myOutputStream);
         myOutputStream.close();
         myInputStream.close();

@@ -8,14 +8,20 @@ public enum InitialDataFilePaths {
     JSON_COURTS_CASENUMBERS_CASEGROUPS("courts-casenumbers-casegroups.json")
     ;
 
-    private final String filePath;
+    String filePath;
 
     InitialDataFilePaths(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void setFilePath(String filePath){
         this.filePath = filePath;
     }
 
     public String getFilePath() {
         return this.filePath;
     }
+
+
 
 }

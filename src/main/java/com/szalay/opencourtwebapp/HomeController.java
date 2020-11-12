@@ -16,52 +16,87 @@ class HomeController {
 
     public final DecisionRepository decisionRepository;
 
+    private String searchedTermGlobal;
+
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
+        //ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
     }
 
     @CrossOrigin
     @GetMapping("/home")
     public Object home() {
-        return decisionRepository.count();
+        List<Object> homePageContent = new ArrayList<>();
+        List<DecisionDto> popularDecisions = new ArrayList<>();
+        homePageContent.add(decisionRepository.count());
+        for (int i = 0; i < decisionRepository.findByViewCountGreaterThanEqualOrderByViewCountDesc(1).size(); i++) {
+            popularDecisions.add(decisionRepository.findByViewCountGreaterThanEqualOrderByViewCountDesc(1).get(i));
+            if (i >= 10) {
+                break;
+            }
+        }
+        homePageContent.add(popularDecisions);
+        return homePageContent;
     }
 
     @CrossOrigin
     @GetMapping("/results")
     public List<DecisionSearchResult> search(@RequestParam String searchedTerm) {
-        List<DecisionDto> decisionDtoList = decisionRepository.findByDecisionTextContaining(searchedTerm);
-        List<DecisionSearchResult> resultsList = fillResultsList(decisionDtoList, searchedTerm);
+        this.searchedTermGlobal = searchedTerm;
+        List<DecisionSearchResult> resultsList = new ArrayList<>();
+        List<DecisionDto> resultDecisions = new ArrayList<>();
+        for (DecisionDto decisionDto : decisionRepository.findByFrequentSearchKeywordsContainingOrderByViewCountDesc(searchedTerm)) {
+            // Find the context of the searched term
+            String contextString = getSearchContext(decisionDto, searchedTerm);
+            // Add result to resultlist
+            resultsList.add(new DecisionSearchResult(decisionDto, contextString, searchedTerm));
+            resultDecisions.add(decisionDto);
+        }
+        for (DecisionDto decisionDto : decisionRepository.findByDecisionTextContainingOrderByViewCountDesc(searchedTerm)) {
+            if (!resultDecisions.contains(decisionDto)) {
+                // Find the context of the searched term
+                String contextString = getSearchContext(decisionDto, searchedTerm);
+                // Add result to resultlist
+                resultsList.add(new DecisionSearchResult(decisionDto, contextString, searchedTerm));
+                resultDecisions.add(decisionDto);
+            }
+        }
         return resultsList;
     }
 
     @CrossOrigin
     @GetMapping("/{ugyszam}")
     public DecisionDto decision(@PathVariable("ugyszam") String ugyszam) {
-        return decisionRepository.findByCaseNumber(ugyszam).get(0);
+        // Find decision
+        DecisionDto myDecision = decisionRepository.findByCaseNumber(ugyszam).get(0);
+        // Add current searched term to frequently searched terms
+        decisionRepository.setFrequentSearchKeywordsFor(this.searchedTermGlobal
+                + myDecision.frequentSearchKeywords + "_", myDecision.caseNumber);
+        // Add +1 to decision view count
+        decisionRepository.setViewCountsFor(myDecision.viewCount + 1, myDecision.caseNumber);
+        return myDecision;
+
     }
 
-    public List<DecisionSearchResult> fillResultsList(List<DecisionDto> decisionDtoList, String searchedTerm) {
-        List<DecisionSearchResult> resultsList = new ArrayList();
+    private String getSearchContext(DecisionDto decisionDto, String searchedTerm) {
         String contextString = "ContextString variable is empty";
-        for (DecisionDto decisionDto : decisionDtoList) {
-            String[] tempParagraphArray;
-            try {
-                tempParagraphArray = decisionDto.decisionText.split("\n");
-                for (String paragraph : tempParagraphArray) {
-                    if (paragraph.contains(searchedTerm)) {
-                        contextString = "[...] " + " " + paragraph + " [...]";
-                        contextString = contextString.replace(searchedTerm, "<mark>" + searchedTerm + "</mark>");
-                    }
+        String[] tempParagraphArray;
+        try {
+            tempParagraphArray = decisionDto.decisionText.split("\n");
+            int lastFoundIndex = 0;
+            int smallestDiff = Integer.MAX_VALUE;
+            for (int i = 0; i < tempParagraphArray.length; i++) {
+                if (tempParagraphArray[i].contains(searchedTerm) && (i - lastFoundIndex) < smallestDiff) {
+                    contextString = tempParagraphArray[lastFoundIndex] + "\n" + tempParagraphArray[i];
+                    smallestDiff = i - lastFoundIndex;
+                    lastFoundIndex = i;
                 }
-                resultsList.add(new DecisionSearchResult(decisionDto, contextString, searchedTerm));
-            } catch (NoSuchElementException exception) {
-                System.out.println("NoSuchElementException");
             }
+        } catch (NoSuchElementException exception) {
+            System.out.println("NoSuchElementException");
         }
-        return resultsList;
+        return contextString;
     }
-
 
 
 }

@@ -1,10 +1,30 @@
-<div class="card text-white bg-info mb-3" *ngFor="let result of resultsList; let i = index;">
-  <div class="card-header">{{result.decisionDto.birosag}}</div>
+
+<h2>Találatok:</h2>
+<div class="card text-white bg-dark mb-3" *ngFor="let result of resultsList; let i = index;">
+  <div class="card-header row align-items-center" >
+    <div class="col-lg-2 m-2">
+      {{result.decisionDto.caseNumber}}
+    </div>
+    <div class="col-lg-2 m-2">
+      {{result.decisionDto.courtName}}
+    </div>
+    <div class="col-lg-2 m-2">
+      {{result.decisionDto.decisionDate}}
+    </div>
+    <div class="col-lg-2 m-2">
+      {{result.decisionDto.subjectMatter}}
+    </div>
+      <a class="btn btn-warning m-2" href="{{result.decisionDto.source}}">Letöltés</a>
+   
+      
+    <button [routerLink]="['/',result.decisionDto.caseNumber]"
+    [queryParams]="{'searchedTerm': mySearch.searchedTerm}"
+    class="btn btn-primary" style="height: 50px;">Megnyitás</button>
+  </div>
   <div class="card-body">
-    <h5 class="card-title">{{result.decisionDto.ugyszam}}</h5>
-    <p class="card-text">{{result.searchContextString}}</p>
-    <button 
-    [routerLink]="['/', result.decisionDto.ugyszam]"
-    class="btn btn-primary">Megnyitás</button>
+    <h5 class="card-title">
+    </h5>
+    <p class="card-text" innerHTML="{{ result.searchContextString | highlight : mySearch.searchedTerm}}">  
+    </p>
   </div>
 </div>

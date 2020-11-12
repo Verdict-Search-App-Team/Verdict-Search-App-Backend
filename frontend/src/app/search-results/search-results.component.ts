@@ -14,11 +14,11 @@ export class SearchResultsComponent implements OnInit {
   resultsList;
   contextList;
 
-  decisionText = "asfdcas";
+  decisionText;
   decisionToBeShown = -1;
   isDecisionShown = false;
 
-  mySearch: { searchedTerm: string };
+  mySearch;
 
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
@@ -31,6 +31,7 @@ export class SearchResultsComponent implements OnInit {
     this.http
       .get('http://localhost:8080/results', { params: this.route.snapshot.queryParams, headers: this.httpHeaders })
       .subscribe(response => {
+        this.mySearch = this.route.snapshot.queryParams;
         this.resultsList = response;
         this.resultsList.forEach(element => {
           this.contextList.push(element['searchContextString'])
@@ -39,3 +40,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
 }
+
+
+
+

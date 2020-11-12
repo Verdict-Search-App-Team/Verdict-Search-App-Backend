@@ -10,9 +10,10 @@ public class OpencourtwebappApplication {
 
     public static void main(String[] args) {
 
+        InitialDataFilePaths.DECISIONS_FILESYSTEM_LOCATION.setFilePath(args[0]);
         SpringApplication.run(OpencourtwebappApplication.class, args);
 
-        ScraperHU.start();
+        //ScraperHU.start();
 
 
     }

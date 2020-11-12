@@ -1,15 +1,31 @@
 package com.szalay.opencourtwebapp.db;
 
 import com.szalay.opencourtwebapp.IOUtils;
+import com.szalay.opencourtwebapp.InitialDataFilePaths;
 import com.szalay.opencourtwebapp.TextProcessor;
 
 import javax.persistence.*;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Map;
 
 @Entity
 @Table(name = "hu_dontesek")
 public class DecisionDto /*implements Serializable*/ {
+
+    private static Map<String, Object> courtNamesMap;
+
+    private File decisionFile;
+
+    static {
+
+        try {
+            courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Id
     //@GeneratedValue
@@ -38,6 +54,9 @@ public class DecisionDto /*implements Serializable*/ {
     public String subjectMatter;
 
     @Column
+    public String source;
+
+    @Column
     public String grammaticalKeywords;
 
     @Column
@@ -53,11 +72,10 @@ public class DecisionDto /*implements Serializable*/ {
     public DecisionDto(File file) {
         String rawtext = IOUtils.readRtf(file.getAbsolutePath());
         this.caseNumber = TextProcessor.extractCaseNumber(file.getName());
-        if (rawtext != null){
+        if (rawtext != null) {
             this.decisionText = TextProcessor.prepareDecisionText(rawtext);
             System.out.println("The length of decisiontext is: " + this.decisionText.length());
             System.out.println(this.decisionText);
-
             this.courtName = TextProcessor.extractCourtName(this.decisionText);
             this.caseType = TextProcessor.extractCaseType(file.getName());
             this.procedureYear = TextProcessor.extractProcedureYear(file.getName());
@@ -67,11 +85,13 @@ public class DecisionDto /*implements Serializable*/ {
             this.grammaticalKeywords = TextProcessor.extractGrammaticalKeywords(this.decisionText);
             this.frequentSearchKeywords = null;
             this.viewCount = 0;
+            this.decisionFile = file;
+            this.source = reconstructSource();
         }
-
     }
 
-    public DecisionDto(String caseNumber, String courtName, String caseType, String decisionText, LocalDate decisionDate, String procedureYear, String subjectMatter, String grammaticalKeywords, String frequentSearchKeywords, long viewCount) {
+    public DecisionDto(String caseNumber, String courtName, String caseType, String decisionText, LocalDate decisionDate, String procedureYear, String subjectMatter, String grammaticalKeywords, String frequentSearchKeywords,
+                       long viewCount) {
         this.caseNumber = caseNumber;
         this.courtName = courtName;
         this.caseType = caseType;
@@ -82,8 +102,27 @@ public class DecisionDto /*implements Serializable*/ {
         this.grammaticalKeywords = grammaticalKeywords;
         this.frequentSearchKeywords = frequentSearchKeywords;
         this.viewCount = viewCount;
+        this.source = reconstructSource();
     }
 
-
+    private String reconstructSource() {
+        // MINTA:  https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
+        String courtCode = "";
+        String subject = decisionFile.getName().split("-")[0];
+        subject = subject.substring(0, 1).toUpperCase() + subject.substring(1);
+        for (String code : courtNamesMap.keySet()) {
+            if (((ArrayList<String>)courtNamesMap.get(code)).get(0).contains(courtName)) {
+                courtCode = code;
+            }
+        }
+        return "https://ukp.birosag.hu/portal-frontend/stream/birosagKod/"
+                + courtCode + "/hatarozatAzonosito/"
+                + subject + "."
+                + this.decisionFile.getName().split("-")[1]
+                + "_"
+                + this.procedureYear + "_"
+                + this.decisionFile.getName().split("-")[decisionFile.getName().split("-").length - 1];
+    }
 
 }
+

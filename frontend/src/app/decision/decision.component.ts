@@ -10,8 +10,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class DecisionComponent implements OnInit {
 
-  decision: { id: string }
+  decision: { id: any; };
+  decisionObject: Object;
   decisionString: string[];
+  mySearch;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
 
@@ -19,12 +21,16 @@ export class DecisionComponent implements OnInit {
     this.decision = {
       id: this.route.snapshot.params['id']
     };
+    this.mySearch = this.route.snapshot.queryParams;
+    console.log('GET: http://localhost:8080/' + this.decision.id);
     this.http.
       get('http://localhost:8080/' + this.decision.id)
       .subscribe(response => {
-        this.decisionString = response[0]['decisionString'].split("\n");
+        this.decisionString = response['decisionText'].split("\n");
+        this.decisionObject = response;
       });
   }
 
 }
+
 
