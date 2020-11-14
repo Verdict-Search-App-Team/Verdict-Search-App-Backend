@@ -1,5 +1,5 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Opencourt</a>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark justify-content-between">
+    <a class="navbar-brand" href="#">The Verdict Search App</a>
     <button class="navbar-toggler" type="button" aria-controls="navbarContent" [attr.aria-expanded]="!collapsed"
         aria-label="Toggle navigation" (click)="collapsed = !collapsed">
         <span class="navbar-toggler-icon"></span>
@@ -23,15 +23,13 @@
             </li>
         </ul>
     </div> -->
-</nav>
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-secondary" style="top: 55px">
     <form class="form-inline my-0 my-lg-0">
         <div class="form-group my-0 my-lg-0" >
-            <input type="text" class="form-control mr-sm-1" placeholder="Search" [(ngModel)]="keyword"
+            <input type="text" class="form-control mr-sm-1" placeholder="Keresés" [(ngModel)]="keyword"
                 name="search">
             <button [routerLink]="['/results']" routerLinkActive="router-link-active" 
             [queryParams]="{'searchedTerm': keyword}"
-            class="btn btn-dark my-0 my-sm-0" type="submit">Search
+            class="btn btn-dark my-0 my-sm-0" type="submit">Keresés
         </button>
         </div>
     </form>

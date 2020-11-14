@@ -29,6 +29,27 @@ app-decision .ribbon-highlight:before {
     border-right-color: transparent;
 }
 
+.decision-infobox{
+    margin-top: 150px;
+}
+
+.card-header a{
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.card-header button{
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar{
+    height: 75px;
+}
+
+
 
 
 @media (min-width: 1400px) {
