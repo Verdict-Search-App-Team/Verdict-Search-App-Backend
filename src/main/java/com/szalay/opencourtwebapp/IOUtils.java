@@ -31,14 +31,14 @@ public class IOUtils {
     }
 
     public static String readRtf(String filePath) {
-        String result = null;
+        String result;
         File file = new File(filePath);
         try {
             DefaultStyledDocument styledDoc = new DefaultStyledDocument();
             InputStream is = new FileInputStream(file);
             new RTFEditorKit().read(is, styledDoc, 0);
             result = new String(styledDoc.getText(0, styledDoc.getLength()).getBytes(StandardCharsets.UTF_8));
-        } catch (IOException | BadLocationException | ArrayIndexOutOfBoundsException e ) {
+        } catch (IOException | BadLocationException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return null;
         }
@@ -71,7 +71,7 @@ public class IOUtils {
     }
 
     public static void writeString(String tobewritten, String filepath, boolean append) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath, append))){
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath, append))) {
             bufferedWriter.write(tobewritten);
         } catch (IOException iOEx) {
             iOEx.printStackTrace();

@@ -5,6 +5,7 @@ import com.szalay.opencourtwebapp.db.DecisionRepository;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,28 +13,20 @@ import static com.szalay.opencourtwebapp.InitialDataFilePaths.DECISIONS_FILESYST
 
 public class ImportUtils {
 
-//    @Autowired
-//    static DecisionRepository decisionRepository;
-
     private static final List<File> decisionFiles = new ArrayList<>();
     private static final List<File> directoriesToBeChecked = new ArrayList<>();
-
 
     public static List<File> getListOfFilesContainingDecisions(String mainFolderPath) {
         try {
             File[] files = new File(mainFolderPath).listFiles();
-            System.out.println(new File(mainFolderPath).listFiles().toString());
-            for (File file :
-                    files) {
-                    directoriesToBeChecked.add(file);
-            }
+            assert files != null;
+            directoriesToBeChecked.addAll(Arrays.asList(files));
             while (!directoriesToBeChecked.isEmpty()) {
                 recursiveSearch();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return decisionFiles;
     }
 
@@ -55,11 +48,11 @@ public class ImportUtils {
         }
     }
 
-    public static void saveAllFromFilesystemToDB (DecisionRepository decisionRepository) {
+    public static void saveAllFromFilesystemToDB(DecisionRepository decisionRepository) {
         List<File> fileList = ImportUtils.getListOfFilesContainingDecisions(DECISIONS_FILESYSTEM_LOCATION.getFilePath());
         for (File file : fileList) {
             // Only construct new DecisionDto object if the record doesn't already exist in the database
-            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() == 0){
+            if (decisionRepository.findByCaseNumber(TextProcessor.extractCaseNumber(file.getName())).size() == 0) {
                 decisionRepository.save(new DecisionDto(file));
                 System.out.println("Saved " + file.getName() + " to DB");
             }

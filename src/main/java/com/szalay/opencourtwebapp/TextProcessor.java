@@ -1,9 +1,6 @@
 package com.szalay.opencourtwebapp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TextProcessor {
 
@@ -13,22 +10,17 @@ public class TextProcessor {
         Map<String, String> replacementMap = new HashMap<>(Map.of(
                 "õ", "ő",
                 "Õ", "Ő",
-//                "Õ".toLowerCase(), "ő",
-//                "Õ", "Ő",
                 "û", "ű",
                 "û".toUpperCase(), "Ű"
         ));
         String preparedText = rawText.replaceAll("[\n]{1,10}", "\n");
-//        System.out.println(preparedText);
         for (String target :
                 replacementMap.keySet()) {
             if (preparedText.contains(target)) {
                 preparedText = preparedText.replaceAll(target, replacementMap.get(target));
             }
         }
-        if (preparedText != null) {
-            return preparedText;
-        } else return "Error in prepareText method!";
+        return Objects.requireNonNullElse(preparedText, "Error in prepareText method!");
     }
 
     public static String extractCaseNumber(String fileName) {
@@ -42,7 +34,7 @@ public class TextProcessor {
         Map<String, Object> courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
         for (String line : decisionText.split("\n")) {
             for (String courtCode : courtNamesMap.keySet()) {
-                List<String> courtNamesArray = (ArrayList<String>)courtNamesMap.get(courtCode);
+                List<String> courtNamesArray = (ArrayList<String>) courtNamesMap.get(courtCode);
                 for (String courtName : courtNamesArray) {
                     if (!courtName.equals("") && line.toLowerCase().contains(courtName.toLowerCase())) {
                         return courtName;
@@ -64,8 +56,8 @@ public class TextProcessor {
     }
 
     public static int[] extractDecisionDate(String decisionText) {
-        int[] datumArray = new int[]{1900, 1, 1};
-        String[] honapok = new String[]{"jan", "feb", "márc", "ápr", "máj", "jún", "júl", "aug", "szept", "okt", "nov", "dec"};
+        int[] dateArray = new int[]{1900, 1, 1};
+        String[] months = new String[]{"jan", "feb", "márc", "ápr", "máj", "jún", "júl", "aug", "szept", "okt", "nov", "dec"};
 
         int lastindex = decisionText.lastIndexOf("20");
 
@@ -74,27 +66,27 @@ public class TextProcessor {
         String dateSubstring = dateSubstringPlain.substring(0, dateSubstringPlain.indexOf("\n") - 1);
         String[] dateSubstringArray = dateSubstring.split("(?=20[0-9]{2}[.]?[ ]?[a-z]{3,20}[ ]?[a-z]{0,10}[ ]?[0-9]{2})");
 
-        //ÉV
+        //YEAR
         try {
-            datumArray[0] = Integer.parseInt(dateSubstringArray[0].substring(0, 4));
+            dateArray[0] = Integer.parseInt(dateSubstringArray[0].substring(0, 4));
         } catch (Exception e) {
             System.out.println("Hiba az év olvasásakor");
         }
 
-        //HÓNAP
-        for (int i = 0; i < honapok.length; i++) {
-            if (dateSubstringArray[0].toLowerCase().contains(honapok[i])) {
-                datumArray[1] = i + 1;
+        //MONTH
+        for (int i = 0; i < months.length; i++) {
+            if (dateSubstringArray[0].toLowerCase().contains(months[i])) {
+                dateArray[1] = i + 1;
                 break;
             }
         }
-        //NAP
+        //DAY
         try {
-            datumArray[2] = Integer.parseInt(dateSubstringArray[0].substring(dateSubstringArray[0].length() - 2));
+            dateArray[2] = Integer.parseInt(dateSubstringArray[0].substring(dateSubstringArray[0].length() - 2));
         } catch (Exception e) {
             System.out.println("Hiba a nap olvasásakor");
         }
-        return datumArray;
+        return dateArray;
 
     }
 
@@ -122,33 +114,20 @@ public class TextProcessor {
                 return decisonText.substring(decisonText.indexOf("szemben "), lowestIndex);
             }
         } else if ((lowestIndex == indexes[1] || lowestIndex == indexes[2])
-            && (lowestIndex >= 0) ) {
+                && (lowestIndex >= 0)) {
             //uj valtozo legyen
-            String hatarozatszovegSub = decisonText.substring(0, lowestIndex);
-            hatarozatszovegSub = hatarozatszovegSub.substring(hatarozatszovegSub.lastIndexOf('A'), lowestIndex);
-            hatarozatszovegSub = hatarozatszovegSub.replaceAll("A ", "");
-            hatarozatszovegSub = hatarozatszovegSub.replaceAll("Az ", "");
-            return hatarozatszovegSub;
+            String decisionSubstring = decisonText.substring(0, lowestIndex);
+            decisionSubstring = decisionSubstring.substring(decisionSubstring.lastIndexOf('A'), lowestIndex);
+            decisionSubstring = decisionSubstring.replaceAll("A ", "");
+            decisionSubstring = decisionSubstring.replaceAll("Az ", "");
+            return decisionSubstring;
         }
         return "Could not determine tárgy";
 
     }
 
     public static String extractGrammaticalKeywords(String decisionText) {
-        //EGYELŐRE NEM MŰKÖDIK RENDESEN:
-//        String kulcsSzavak = decisionText;
-//        String[] hatarozatszovegSplit = decisionText.split(" ");
-//        for (String szo :
-//                hatarozatszovegSplit) {
-//            if (gyakoriszavak.contains(szo.replaceAll(" ", ""))
-//                    && !szo.equals("\n")){
-//                kulcsSzavak = kulcsSzavak.replaceAll(szo, ";");
-//            }
-//        }
-//        kulcsSzavak = kulcsSzavak.replaceAll("<br>", ";");
-////        kulcsSzavak = kulcsSzavak.replaceAll("[a-z]{0,4}", ";");
-//        kulcsSzavak = kulcsSzavak.replaceAll("[;]{2,10}", "");
-//        return kulcsSzavak;
+        //To be implemented
         return null;
     }
 

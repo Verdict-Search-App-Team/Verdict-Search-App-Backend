@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "hu_dontesek")
-public class DecisionDto /*implements Serializable*/ {
+public class DecisionDto {
 
     private static Map<String, Object> courtNamesMap;
 
@@ -28,8 +28,6 @@ public class DecisionDto /*implements Serializable*/ {
     }
 
     @Id
-    //@GeneratedValue
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     public String caseNumber;
 
@@ -65,8 +63,8 @@ public class DecisionDto /*implements Serializable*/ {
     @Column
     public long viewCount;
 
+    public DecisionDto(){
 
-    public DecisionDto() {
     }
 
     public DecisionDto(File file) {
@@ -111,7 +109,8 @@ public class DecisionDto /*implements Serializable*/ {
         String subject = decisionFile.getName().split("-")[0];
         subject = subject.substring(0, 1).toUpperCase() + subject.substring(1);
         for (String code : courtNamesMap.keySet()) {
-            if (((ArrayList<String>)courtNamesMap.get(code)).get(0).contains(courtName)) {
+            if (!((ArrayList<String>) courtNamesMap.get(code)).get(0).contains(courtName)) {
+            } else {
                 courtCode = code;
             }
         }

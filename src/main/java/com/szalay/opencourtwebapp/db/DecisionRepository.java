@@ -12,8 +12,6 @@ import java.util.List;
 public interface DecisionRepository extends CrudRepository<DecisionDto, String> {
 
     List<DecisionDto> findByCaseNumber(String query);
-    List<DecisionDto> findByDecisionTextContaining(String query);
-
     List<DecisionDto> findByFrequentSearchKeywordsContainingOrderByViewCountDesc(String query);
     List<DecisionDto> findByDecisionTextContainingOrderByViewCountDesc(String query);
     List<DecisionDto> findByViewCountGreaterThanEqualOrderByViewCountDesc(long minimumCount);

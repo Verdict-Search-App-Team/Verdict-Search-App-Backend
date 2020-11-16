@@ -12,26 +12,14 @@ import static com.szalay.opencourtwebapp.InitialDataFilePaths.JSON_COURTS_CASENU
 
 public final class ScraperHU {
 
-    /*
-    These parameters may be updated regularly
-     */
-
     private static final JSONArray successfulDownloadsInfo = new JSONArray();
     private static final JSONArray failedDownloadsInfo = new JSONArray();
-
-    private static List<DownloadResult> previousSuccessfulDownloadsInfo;
-    private static List<DownloadResult> previousFailedDownloadsInfo;
-
-    private static int successfulDownloads = 0;
-    private static int failedDownloads = 0;
-
-    private static final String mainFolderPath = "/media/greg/FD_BETA9SR2/opencourt";
-
     private static final int currentYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime()));
     private static final int earliestYear = 2005;
     // File numbers are usually between 1-20
     private static final int highestFileNo = 20;
-
+    private static List<DownloadResult> previousSuccessfulDownloadsInfo;
+    private static List<DownloadResult> previousFailedDownloadsInfo;
     private static Collection<Map<String, Object>> downloadInfos;
     private static Map<String, Object> courtNamesMap;
 
@@ -45,19 +33,15 @@ public final class ScraperHU {
         }
         try {
             previousSuccessfulDownloadsInfo = DownloadResult.parseFromList(DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "successful-downloads-info.json");
-
         } catch (Exception e) {
             System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "successful-downloads-info.json");
         }
         try {
             previousFailedDownloadsInfo = DownloadResult.parseFromList(DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
-
         } catch (Exception e) {
             System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
         }
-//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json", true);
-//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json", true);
-//        IOUtils.writeString("[", DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/empty-downloads-info.json", true);
+
     }
 
     /*
@@ -67,9 +51,6 @@ public final class ScraperHU {
 
     public static void start() {
         // https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
-//        download(DECISIONS_FILESYSTEM_LOCATION.getFilePath(), "0001", "Kúria", "Gfv",
-//                30155, 2009, 5);
-
 
         // Every download info unit
         for (Map<String, Object> downloadInfo : downloadInfos) {
@@ -107,13 +88,11 @@ public final class ScraperHU {
         }
 
 
-
-
     }
 
 
     public static void download(String downloadFolderPath, String courtCode, String courtName, String caseGroup, long caseNumber, int year, int fileNo) {
-        // MINTA:  https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
+        // EXAMPLE URL:  https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
         String downloadUrl = "https://ukp.birosag.hu/portal-frontend/stream/birosagKod/"
                 + courtCode + "/hatarozatAzonosito/"
                 + caseGroup + "."
@@ -122,7 +101,7 @@ public final class ScraperHU {
                 + fileNo + "//";
         String nameOfNewFile = caseGroup.toLowerCase() + "-" + caseNumber + "-" + year + "-" + fileNo;
         String pathOfNewFile;
-        if (courtName.toLowerCase().split(" ").length >= 2){
+        if (courtName.toLowerCase().split(" ").length >= 2) {
             pathOfNewFile = downloadFolderPath
                     + "/" + courtName.toLowerCase().split(" ")[0]
                     + "-"
@@ -137,7 +116,7 @@ public final class ScraperHU {
         System.out.println("DownloadURL is: " + downloadUrl);
         System.out.println("Path of new file is: " + pathOfNewFile);
         if ((previousSuccessfulDownloadsInfo != null && !containsDownloadResult(previousSuccessfulDownloadsInfo, downloadUrl))
-        || (previousFailedDownloadsInfo != null && !containsDownloadResult(previousFailedDownloadsInfo, downloadUrl))){
+                || (previousFailedDownloadsInfo != null && !containsDownloadResult(previousFailedDownloadsInfo, downloadUrl))) {
             return;
         }
         try {
@@ -155,7 +134,6 @@ public final class ScraperHU {
             IOUtils.writeString(failedDownloadsInfo.toJSONString(),
                     DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/failed-downloads-info.json",
                     false);
-            failedDownloads++;
             iOEx.printStackTrace();
         }
     }

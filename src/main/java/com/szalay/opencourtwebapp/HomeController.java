@@ -12,15 +12,12 @@ import java.util.NoSuchElementException;
 @RequestMapping("/")
 class HomeController {
 
-//    HttpHeaders headers = new HttpHeaders();
-
     public final DecisionRepository decisionRepository;
-
     private String searchedTermGlobal;
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        //ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
+        ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
     }
 
     @CrossOrigin
@@ -68,12 +65,12 @@ class HomeController {
     @GetMapping("/{ugyszam}")
     public DecisionDto decision(@PathVariable("ugyszam") String ugyszam) {
         // Find decision
-        DecisionDto myDecision = new DecisionDto();
-        if  (decisionRepository.findByCaseNumber(ugyszam).get(0) != null){
+        DecisionDto myDecision = null;
+        if (decisionRepository.findByCaseNumber(ugyszam).get(0) != null) {
             myDecision = decisionRepository.findByCaseNumber(ugyszam).get(0);
         }
-
         // Add current searched term to frequently searched terms
+        assert myDecision != null;
         decisionRepository.setFrequentSearchKeywordsFor(this.searchedTermGlobal
                 + myDecision.frequentSearchKeywords + "_", myDecision.caseNumber);
         // Add +1 to decision view count
