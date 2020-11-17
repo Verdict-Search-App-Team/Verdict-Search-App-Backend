@@ -1,8 +1,8 @@
-#Demo spring backend project, searchable database of Hungarian court decisions
+# Demo spring backend project, searchable database of Hungarian court decisions
 
-Compatible only with Java 11. This is a Gradle project. 
+*Compatible only with Java 11. This is a Gradle project.*
 
-##To run:
+## To run:
 
 1.
 
@@ -28,10 +28,12 @@ OR
 Commandline arguments (may be written in any order, all are optional):
 
 (optional) [ARGUMENT1] is the directory where decision rtf files are to be stored and downloaded, default is /Decisions folder
+
 (optional) [ARGUMENT2] if "read" then the decisions are read from the storage directory specified, default is not to read
+
 (optional) [ARGUMENT3] if "scrape" then is the the program starts to download files from birosag.hu, the site run by Hungarian courts, default is not to start downloading
 
-##API documentation
+## API documentation
 
 "/home" returns JSON with the following structure and contents: [NUMBER OF DECISIONS IN DB, [{MOST POPULAR DECISION MAP OBJ 1}, {MOST POPULAR DECISION MAP OBJ 2}, ...]]
 
