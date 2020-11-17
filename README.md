@@ -10,7 +10,9 @@ Start MySQL server and create custom database
 
 2.
 
-Fill out application.properties file with JDBC data relevant to your database created in step 1.
+Make an application.properties file in folder src/main/resources/emptysample.properties ("emptysample.properties" file can be used as template).
+
+Fill out the application.properties with JDBC data relevant to your database created in step 1.
 
 3.
 
