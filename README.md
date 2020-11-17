@@ -35,7 +35,7 @@ Commandline arguments (may be written in any order, all are optional):
 
 ## API documentation
 
-*GET /home* 
+*GET /* 
 
 returns JSON with the following structure and contents: [NUMBER OF DECISIONS IN DB, [{MOST POPULAR DECISION MAP OBJ 1}, {MOST POPULAR DECISION MAP OBJ 2}, ...]]
 

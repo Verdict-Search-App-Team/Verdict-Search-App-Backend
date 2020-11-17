@@ -23,7 +23,7 @@ class HomeController {
     }
 
     @CrossOrigin
-    @GetMapping("/home")
+    @GetMapping("/")
     public Object home() {
         List<Object> homePageContent = new ArrayList<>();
         List<DecisionDto> popularDecisions = new ArrayList<>();
