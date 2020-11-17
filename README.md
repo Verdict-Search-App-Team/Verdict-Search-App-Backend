@@ -1,5 +1,7 @@
 # Demo spring backend project, searchable database of Hungarian court decisions
 
+(Relating frontend project: https://github.com/Verdict-Search-App-Team/Verdict-Search-App-Frontend)
+
 *Compatible only with Java 11. This is a Gradle project.*
 
 ## To run:
