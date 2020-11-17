@@ -35,10 +35,16 @@ Commandline arguments (may be written in any order, all are optional):
 
 ## API documentation
 
-*GET /home* returns JSON with the following structure and contents: [NUMBER OF DECISIONS IN DB, [{MOST POPULAR DECISION MAP OBJ 1}, {MOST POPULAR DECISION MAP OBJ 2}, ...]]
+*GET /home* 
 
-*GET /results?searchedTerm='[searchedTerm]'* returns JSON array of all decision map objects containing the '[searchedTerm]'
+returns JSON with the following structure and contents: [NUMBER OF DECISIONS IN DB, [{MOST POPULAR DECISION MAP OBJ 1}, {MOST POPULAR DECISION MAP OBJ 2}, ...]]
 
-*GET /'[caseNumber]'* returns JSON one decision map object
+*GET /results?searchedTerm='[searchedTerm]'* 
+
+returns JSON array of all decision map objects containing the '[searchedTerm]'
+
+*GET /'[caseNumber]'* 
+
+returns JSON one decision map object
 
 [Prototype](https://backend.verdict-search.app/ "Verdict Search App Backend API")  is available for testing at https://backend.verdict-search.app/
