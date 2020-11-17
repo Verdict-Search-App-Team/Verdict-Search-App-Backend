@@ -17,7 +17,9 @@ class HomeController {
 
     public HomeController(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
-        ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
+        if (OpencourtwebappApplication.isRead()){
+            ImportUtils.saveAllFromFilesystemToDB(decisionRepository);
+        }
     }
 
     @CrossOrigin

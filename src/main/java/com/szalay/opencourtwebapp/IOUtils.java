@@ -53,13 +53,13 @@ public class IOUtils {
         return IOUtils.myParser.parseList(readString(filePath));
     }
 
-    public static void download(String urlStr, String file) throws IOException, MuteURLException {
+    public static void download(String urlStr, String file) throws IOException, MuteUrlException {
         URL url = new URL(urlStr);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
         if (connection.getResponseCode() >= 500) {
-            throw new MuteURLException("HTTP request returned with response code: " + connection.getResponseCode());
+            throw new MuteUrlException("HTTP request returned with response code: " + connection.getResponseCode());
         }
         InputStream myInputStream = connection.getInputStream();
         File myNewDecision = new File(file);

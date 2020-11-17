@@ -1,10 +1,18 @@
 package com.szalay.opencourtwebapp;
 
+import java.io.File;
 import java.util.*;
 
 public class TextProcessor {
 
     //SPECIALISED TEXT PROCESSING METHODS FOR COURT DECISIONS
+
+    private static Map<String, Object> courtNamesMap;
+
+
+    static {
+        courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
+    }
 
     public static String prepareDecisionText(String rawText) {
         Map<String, String> replacementMap = new HashMap<>(Map.of(
@@ -129,6 +137,26 @@ public class TextProcessor {
     public static String extractGrammaticalKeywords(String decisionText) {
         //To be implemented
         return null;
+    }
+
+    public static String reconstructSource(File decisionFile, String courtName, String procedureYear) {
+        // MINTA:  https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
+        String courtCode = "";
+        String subject = decisionFile.getName().split("-")[0];
+        subject = subject.substring(0, 1).toUpperCase() + subject.substring(1);
+        for (String code : courtNamesMap.keySet()) {
+            if (!((ArrayList<String>) courtNamesMap.get(code)).get(0).contains(courtName)) {
+            } else {
+                courtCode = code;
+            }
+        }
+        return "https://ukp.birosag.hu/portal-frontend/stream/birosagKod/"
+                + courtCode + "/hatarozatAzonosito/"
+                + subject + "."
+                + decisionFile.getName().split("-")[1]
+                + "_"
+                + procedureYear + "_"
+                + decisionFile.getName().split("-")[decisionFile.getName().split("-").length - 1];
     }
 
 

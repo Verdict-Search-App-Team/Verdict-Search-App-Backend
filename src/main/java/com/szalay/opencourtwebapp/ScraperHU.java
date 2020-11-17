@@ -2,6 +2,7 @@ package com.szalay.opencourtwebapp;
 
 import net.minidev.json.JSONArray;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,7 +15,8 @@ public final class ScraperHU {
 
     private static final JSONArray successfulDownloadsInfo = new JSONArray();
     private static final JSONArray failedDownloadsInfo = new JSONArray();
-    private static final int currentYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime()));
+    private static final int currentYear = Integer.parseInt(new SimpleDateFormat("yyyy")
+            .format(Calendar.getInstance().getTime()));
     private static final int earliestYear = 2005;
     // File numbers are usually between 1-20
     private static final int highestFileNo = 20;
@@ -24,7 +26,6 @@ public final class ScraperHU {
     private static Map<String, Object> courtNamesMap;
 
     static {
-
         try {
             downloadInfos = DownloadInfo.parseFromList(JSON_COURTS_CASENUMBERS_CASEGROUPS.getFilePath());
             courtNamesMap = IOUtils.parseJSONToMap(InitialDataFilePaths.JSON_LIST_OF_COURTS.getFilePath());
@@ -32,16 +33,21 @@ public final class ScraperHU {
             e.printStackTrace();
         }
         try {
-            previousSuccessfulDownloadsInfo = DownloadResult.parseFromList(DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "successful-downloads-info.json");
+            String successfulDownloadsFilepath = DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "successful-downloads-info.json";
+            ensureFileExistence(successfulDownloadsFilepath);
+            previousSuccessfulDownloadsInfo = DownloadResult.parseFromList(successfulDownloadsFilepath);
         } catch (Exception e) {
-            System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "successful-downloads-info.json");
+            System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath()
+                    + "/" + "successful-downloads-info.json");
         }
         try {
-            previousFailedDownloadsInfo = DownloadResult.parseFromList(DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
+            String failedDownloadsFilepath = DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json";
+            ensureFileExistence(failedDownloadsFilepath);
+            previousFailedDownloadsInfo = DownloadResult.parseFromList(failedDownloadsFilepath);
         } catch (Exception e) {
-            System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/" + "failed-downloads-info.json");
+            System.err.println("could not parse " + DECISIONS_FILESYSTEM_LOCATION.getFilePath()
+                    + "/" + "failed-downloads-info.json");
         }
-
     }
 
     /*
@@ -49,13 +55,23 @@ public final class ScraperHU {
     Thus there are decisions which will not be within the scope below and have to be downloaded/uploaded manually.
      */
 
+    public static void ensureFileExistence(String filepath) throws IOException {
+        File failedDownloadsFile = new File(filepath);
+        if(failedDownloadsFile.createNewFile()){
+            System.out.println("File " + failedDownloadsFile.getName() + " didn't exist, but we successfully created it");
+        } else {
+            System.out.println("File already exists, no problem");
+        }
+    }
+
     public static void start() {
         // https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
 
         // Every download info unit
         for (Map<String, Object> downloadInfo : downloadInfos) {
             // Every case number
-            for (long caseNumber = (long) downloadInfo.get("case-numbers-start"); caseNumber < (long) downloadInfo.get("case-numbers-end"); caseNumber++) {
+            for (long caseNumber = (long) downloadInfo.get("case-numbers-start");
+                 caseNumber < (long) downloadInfo.get("case-numbers-end"); caseNumber++) {
                 // Every case group
                 for (String caseGroup : (ArrayList<String>) downloadInfo.get("caseGroups")) {
                     // Every court
@@ -89,7 +105,6 @@ public final class ScraperHU {
 
 
     }
-
 
     public static void download(String downloadFolderPath, String courtCode, String courtName, String caseGroup, long caseNumber, int year, int fileNo) {
         // EXAMPLE URL:  https://ukp.birosag.hu/portal-frontend/stream/birosagKod/0001/hatarozatAzonosito/Gfv.30155_2009_5//
@@ -127,7 +142,7 @@ public final class ScraperHU {
             IOUtils.writeString(successfulDownloadsInfo.toJSONString(),
                     DECISIONS_FILESYSTEM_LOCATION.getFilePath() + "/successful-downloads-info.json",
                     false);
-        } catch (MuteURLException mutUEx) {
+        } catch (MuteUrlException mutUEx) {
             mutUEx.printStackTrace();
         } catch (IOException iOEx) {
             failedDownloadsInfo.add(new DownloadResult(downloadUrl));
@@ -141,6 +156,5 @@ public final class ScraperHU {
     public static boolean containsDownloadResult(final List<DownloadResult> list, final String urlString) {
         return list.stream().anyMatch(dResult -> dResult.getUrlString().equals(urlString));
     }
-
 
 }
